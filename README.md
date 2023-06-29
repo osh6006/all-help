@@ -60,9 +60,11 @@ The following tools were used in this project:
 
 - [Expo](https://expo.io/)
 - [Node.js](https://nodejs.org/en/)
+- [Next.js](https://nextjs.org/)
 - [React](https://pt-br.reactjs.org/)
-- [React Native](https://reactnative.dev/)
 - [TypeScript](https://www.typescriptlang.org/)
+- [TailWindCSS](https://tailwindcss.com/)
+- [MongoDB](https://www.mongodb.com/)
 
 ## :white_check_mark: Requirements
 
