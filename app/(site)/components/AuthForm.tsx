@@ -7,6 +7,8 @@ import { useCallback, useState } from "react";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import AuthSocialButton from "./AuthSocialButton";
 import { BsGithub, BsGoogle } from "react-icons/bs";
+import { SiNaver } from "react-icons/si";
+import { RiKakaoTalkFill } from "react-icons/ri";
 import { toast } from "react-hot-toast";
 import { signIn } from "next-auth/react";
 
@@ -180,10 +182,24 @@ const AuthForm = () => {
             <AuthSocialButton
               icon={BsGithub}
               onClick={() => socialAction("github")}
+              color="text-violet-600"
             />
             <AuthSocialButton
               icon={BsGoogle}
               onClick={() => socialAction("google")}
+              color="text-red-600"
+            />
+          </div>
+          <div className="mt-6 flex gap-2">
+            <AuthSocialButton
+              icon={SiNaver}
+              onClick={() => socialAction("naver")}
+              color="text-green-600"
+            />
+            <AuthSocialButton
+              icon={RiKakaoTalkFill}
+              onClick={() => socialAction("kakao")}
+              color="text-yellow-500"
             />
           </div>
         </div>

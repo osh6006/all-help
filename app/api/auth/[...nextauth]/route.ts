@@ -1,3 +1,4 @@
+import { Role } from "./../../../../nextauth.d";
 import bcrypt from "bcrypt";
 import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -21,6 +22,14 @@ export const authOptions: AuthOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SCRET as string,
     }),
+    KakaoProvider({
+      clientId: process.env.KAKAO_CLIENT_ID as string,
+      clientSecret: process.env.KAKAO_CLIENT_SECRET as string,
+    }),
+    NaverProvider({
+      clientId: process.env.NAVER_CLIENT_ID as string,
+      clientSecret: process.env.NAVER_CLIENT_SECRET as string,
+    }),
 
     CredentialsProvider({
       name: "credentials",
@@ -28,6 +37,7 @@ export const authOptions: AuthOptions = {
         email: { label: "email", type: "text" },
         password: { label: "password", type: "password" },
       },
+
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
           throw new Error("이메일과 비밀번호를 다시한번 확인해 주세요");
@@ -56,6 +66,15 @@ export const authOptions: AuthOptions = {
       },
     }),
   ],
+
+  callbacks: {
+    signIn({ user, profile }) {
+      console.log("sign in", user, profile);
+      user.role = "normal";
+      return true;
+    },
+  },
+
   debug: process.env.NODE_ENV === "development",
   session: {
     strategy: "jwt",

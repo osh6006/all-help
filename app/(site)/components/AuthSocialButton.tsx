@@ -3,17 +3,19 @@ import { IconType } from "react-icons";
 interface AuthSocialButtonProps {
   icon: IconType;
   onClick: () => void;
+  color?: string;
 }
 
 const AuthSocialButton: React.FC<AuthSocialButtonProps> = ({
   icon: Icon,
   onClick,
+  color,
 }) => {
   return (
     <button
       type="button"
       onClick={onClick}
-      className="
+      className={`
         inline-flex
         w-full
         justify-center
@@ -26,7 +28,8 @@ const AuthSocialButton: React.FC<AuthSocialButtonProps> = ({
         ring-inset
         ring-gray-300
         hover:outline-offset-0
-  "
+        ${color}
+  `}
     >
       <Icon />
     </button>
