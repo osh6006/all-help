@@ -30,7 +30,7 @@ export const authOptions: AuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          throw new Error("Invalid Credentials");
+          throw new Error("이메일과 비밀번호를 다시한번 확인해 주세요");
         }
 
         const user = await prisma.user.findUnique({
@@ -40,7 +40,7 @@ export const authOptions: AuthOptions = {
         });
 
         if (!user || !user?.hashedPassword) {
-          throw new Error("Invalid Credentials");
+          throw new Error("이메일 혹은 비밀번호가 일치하지 않습니다.");
         }
 
         const isCorrectPassword = await bcrypt.compare(
@@ -49,7 +49,7 @@ export const authOptions: AuthOptions = {
         );
 
         if (!isCorrectPassword) {
-          throw new Error("Invalid Credentials");
+          throw new Error("이메일 혹은 비밀번호가 일치하지 않습니다.");
         }
 
         return user;
@@ -64,4 +64,4 @@ export const authOptions: AuthOptions = {
 };
 
 const handler = NextAuth(authOptions);
-export { handler as Get, handler as POST };
+export { handler as GET, handler as POST };

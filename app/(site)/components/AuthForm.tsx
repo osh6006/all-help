@@ -7,6 +7,8 @@ import { useCallback, useState } from "react";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import AuthSocialButton from "./AuthSocialButton";
 import { BsGithub, BsGoogle } from "react-icons/bs";
+import { toast } from "react-hot-toast";
+import { signIn } from "next-auth/react";
 
 type Variant = "LOGIN" | "REGISTER";
 
@@ -26,6 +28,7 @@ const AuthForm = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<FieldValues>({
     defaultValues: {
       name: "",
@@ -39,11 +42,33 @@ const AuthForm = () => {
 
     if (variant === "REGISTER") {
       // 서버에 가입 요청
-      axios.post("/api/register", data);
+      axios
+        .post("/api/register", data)
+        .catch(() => toast.error("잘못 입력하셨습니다 !"))
+        .finally(() => setIsLoading(false))
+        .then(() => {
+          reset();
+          toast.success("가입이 완료되었습니다 !");
+          setVariant("LOGIN");
+        });
     }
 
     if (variant === "LOGIN") {
-      // NextAuth에 로그인 요청
+      // NextAuth에 SignIn 요청
+      signIn("credentials", {
+        ...data,
+        redirect: false,
+      })
+        .then(callback => {
+          if (callback?.error) {
+            toast.error(callback.error || "유효하지 않은 정보입니다.");
+          }
+
+          if (callback?.ok && !callback.error) {
+            toast.success("로그인에 성공하셨습니다 !");
+          }
+        })
+        .finally(() => setIsLoading(false));
     }
   };
 

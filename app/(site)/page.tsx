@@ -18,6 +18,7 @@ export default function Home() {
           alt="Logo"
           height="48"
           width="48"
+          priority={true}
           className="mx-auto w-auto"
           src="/images/logo.png"
         />
