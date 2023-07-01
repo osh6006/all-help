@@ -75,6 +75,17 @@ const AuthForm = () => {
   const socialAction = (action: string) => {
     setIsLoading(true);
     // NextAuth에 소셜 로그인 요청
+    signIn(action, { redirect: false })
+      .then(callback => {
+        if (callback?.error) {
+          toast.error(`${action} 계정에 오류가 있습니다! `);
+        }
+
+        if (callback?.ok && !callback?.error) {
+          toast.success(`${action} 계정으로 로그인 하셨습니다!`);
+        }
+      })
+      .finally(() => setIsLoading(false));
   };
 
   return (
