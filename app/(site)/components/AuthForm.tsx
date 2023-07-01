@@ -1,5 +1,6 @@
 "use client";
 
+import axios from "axios";
 import Button from "@/app/components/Button";
 import Input from "@/app/components/inputs/Input";
 import { useCallback, useState } from "react";
@@ -35,8 +36,10 @@ const AuthForm = () => {
 
   const onSubmit: SubmitHandler<FieldValues> = data => {
     setIsLoading(true);
+
     if (variant === "REGISTER") {
       // 서버에 가입 요청
+      axios.post("/api/register", data);
     }
 
     if (variant === "LOGIN") {
@@ -69,6 +72,7 @@ const AuthForm = () => {
       "
       >
         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+          {/* 회원가입일 경우  */}
           {variant === "REGISTER" && (
             <Input
               id="name"
@@ -78,6 +82,7 @@ const AuthForm = () => {
               disabled={isLoading}
             />
           )}
+          {/* === */}
           <Input
             id="email"
             label="Email"
@@ -87,7 +92,7 @@ const AuthForm = () => {
             disabled={isLoading}
           />
           <Input
-            id="paaword"
+            id="password"
             label="Password"
             type="password"
             register={register}
