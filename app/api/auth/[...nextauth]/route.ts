@@ -15,12 +15,12 @@ export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     GithubProvider({
-      clientId: process.env.GITHUB_ID as string,
-      clientSecret: process.env.GITHUB_SECRET as string,
+      clientId: process.env.GITHUB_CLIENT_ID as string,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
     }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SCRET as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
     KakaoProvider({
       clientId: process.env.KAKAO_CLIENT_ID as string,
@@ -53,10 +53,7 @@ export const authOptions: AuthOptions = {
           throw new Error("이메일 혹은 비밀번호가 일치하지 않습니다.");
         }
 
-        const isCorrectPassword = await bcrypt.compare(
-          credentials.password,
-          user.hashedPassword
-        );
+        const isCorrectPassword = await bcrypt.compare(credentials.password, user.hashedPassword);
 
         if (!isCorrectPassword) {
           throw new Error("이메일 혹은 비밀번호가 일치하지 않습니다.");
