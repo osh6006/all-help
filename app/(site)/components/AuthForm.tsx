@@ -3,20 +3,29 @@
 import axios from "axios";
 import Button from "@/app/components/Button";
 import Input from "@/app/components/inputs/Input";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import AuthSocialButton from "./AuthSocialButton";
 import { BsGithub, BsGoogle } from "react-icons/bs";
 import { SiNaver } from "react-icons/si";
 import { RiKakaoTalkFill } from "react-icons/ri";
 import { toast } from "react-hot-toast";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 type Variant = "LOGIN" | "REGISTER";
 
 const AuthForm = () => {
+  const session = useSession();
+  const router = useRouter();
   const [variant, setVariant] = useState<Variant>("LOGIN");
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (session.status === "authenticated") {
+      router.push("/users");
+    }
+  }, [session?.status, router]);
 
   const toggleVariant = useCallback(() => {
     if (variant === "LOGIN") {
@@ -46,13 +55,13 @@ const AuthForm = () => {
       // 서버에 가입 요청
       axios
         .post("/api/register", data)
-        .catch(() => toast.error("잘못 입력하셨습니다 !"))
-        .finally(() => setIsLoading(false))
         .then(() => {
           reset();
           toast.success("가입이 완료되었습니다 !");
           setVariant("LOGIN");
-        });
+        })
+        .catch(() => toast.error("잘못 입력하셨습니다 !"))
+        .finally(() => setIsLoading(false));
     }
 
     if (variant === "LOGIN") {
@@ -68,6 +77,7 @@ const AuthForm = () => {
 
           if (callback?.ok && !callback.error) {
             toast.success("로그인에 성공하셨습니다 !");
+            router.push("/users");
           }
         })
         .finally(() => setIsLoading(false));
