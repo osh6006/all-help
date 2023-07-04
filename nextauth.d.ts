@@ -1,7 +1,7 @@
 // nextauth.d.ts
 import { DefaultSession, DefaultUser } from "next-auth";
 
-export type Role = "normal" | "admin" | "helper";
+export type Role = "normal" | "admin" | "agent";
 interface IUser extends DefaultUser {
   /**
    * Role of user

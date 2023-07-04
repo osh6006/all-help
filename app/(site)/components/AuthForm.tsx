@@ -10,22 +10,17 @@ import { BsGithub, BsGoogle } from "react-icons/bs";
 import { SiNaver } from "react-icons/si";
 import { RiKakaoTalkFill } from "react-icons/ri";
 import { toast } from "react-hot-toast";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import useIsUser from "@/app/hooks/useIsUser";
 
 type Variant = "LOGIN" | "REGISTER";
 
 const AuthForm = () => {
-  const session = useSession();
+  const isUser = useIsUser();
   const router = useRouter();
   const [variant, setVariant] = useState<Variant>("LOGIN");
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    if (session.status === "authenticated") {
-      router.push("/users");
-    }
-  }, [session?.status, router]);
 
   const toggleVariant = useCallback(() => {
     if (variant === "LOGIN") {
@@ -48,7 +43,7 @@ const AuthForm = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<FieldValues> = data => {
+  const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
 
     if (variant === "REGISTER") {
@@ -56,8 +51,8 @@ const AuthForm = () => {
       axios
         .post("/api/register", data)
         .then(() => {
-          reset();
           toast.success("가입이 완료되었습니다 !");
+          reset();
           setVariant("LOGIN");
         })
         .catch(() => toast.error("잘못 입력하셨습니다 !"))
@@ -70,7 +65,7 @@ const AuthForm = () => {
         ...data,
         redirect: false,
       })
-        .then(callback => {
+        .then((callback) => {
           if (callback?.error) {
             toast.error(callback.error || "유효하지 않은 정보입니다.");
           }
@@ -88,7 +83,7 @@ const AuthForm = () => {
     setIsLoading(true);
     // NextAuth에 소셜 로그인 요청
     signIn(action, { redirect: false })
-      .then(callback => {
+      .then((callback) => {
         if (callback?.error) {
           toast.error(`${action} 계정에 오류가 있습니다! `);
         }
@@ -122,23 +117,10 @@ const AuthForm = () => {
         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
           {/* 회원가입일 경우  */}
           {variant === "REGISTER" && (
-            <Input
-              id="name"
-              label="Name"
-              register={register}
-              errors={errors}
-              disabled={isLoading}
-            />
+            <Input id="name" label="Name" register={register} errors={errors} disabled={isLoading} />
           )}
           {/* === */}
-          <Input
-            id="email"
-            label="Email"
-            type="email"
-            register={register}
-            errors={errors}
-            disabled={isLoading}
-          />
+          <Input id="email" label="Email" type="email" register={register} errors={errors} disabled={isLoading} />
           <Input
             id="password"
             label="Password"
@@ -189,28 +171,12 @@ const AuthForm = () => {
             </div>
           </div>
           <div className="mt-6 flex gap-2">
-            <AuthSocialButton
-              icon={BsGithub}
-              onClick={() => socialAction("github")}
-              color="text-violet-600"
-            />
-            <AuthSocialButton
-              icon={BsGoogle}
-              onClick={() => socialAction("google")}
-              color="text-red-600"
-            />
+            <AuthSocialButton icon={BsGithub} onClick={() => socialAction("github")} color="text-violet-600" />
+            <AuthSocialButton icon={BsGoogle} onClick={() => socialAction("google")} color="text-red-600" />
           </div>
           <div className="mt-6 flex gap-2">
-            <AuthSocialButton
-              icon={SiNaver}
-              onClick={() => socialAction("naver")}
-              color="text-green-600"
-            />
-            <AuthSocialButton
-              icon={RiKakaoTalkFill}
-              onClick={() => socialAction("kakao")}
-              color="text-yellow-500"
-            />
+            <AuthSocialButton icon={SiNaver} onClick={() => socialAction("naver")} color="text-green-600" />
+            <AuthSocialButton icon={RiKakaoTalkFill} onClick={() => socialAction("kakao")} color="text-yellow-500" />
           </div>
         </div>
         <div
@@ -224,11 +190,7 @@ const AuthForm = () => {
             text-gray-500
           "
         >
-          <div>
-            {variant === "LOGIN"
-              ? "새 계정이 필요하신가요?"
-              : "이미 계정이 있으신가요?"}
-          </div>
+          <div>{variant === "LOGIN" ? "새 계정이 필요하신가요?" : "이미 계정이 있으신가요?"}</div>
           <div onClick={toggleVariant} className="cursor-pointer underline">
             {variant === "LOGIN" ? "새 계정 만들기" : "로그인 하기"}
           </div>
@@ -246,7 +208,9 @@ const AuthForm = () => {
           "
         >
           <div>상담 센터 직원 이신가요?</div>
-          <div className="cursor-pointer underline">직원 회원 가입 하기</div>
+          <div onClick={() => router.push("/serviceAgent")} className="cursor-pointer underline">
+            직원 회원 가입 하기
+          </div>
         </div>
       </div>
     </div>

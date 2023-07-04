@@ -12,15 +12,7 @@ interface ButtonProps {
   disabled?: boolean;
 }
 
-const Button: React.FC<ButtonProps> = ({
-  type,
-  fullWidth,
-  children,
-  onClick,
-  secondary,
-  danger,
-  disabled,
-}) => {
+const Button: React.FC<ButtonProps> = ({ type, fullWidth, children, onClick, secondary, danger, disabled }) => {
   return (
     <button
       onClick={onClick}
@@ -35,6 +27,7 @@ const Button: React.FC<ButtonProps> = ({
         py-2
         text-sm
         font-semibold
+        transition-colors
         focus-visible:outline
         focus-visible:outline-2
         focus-visible:outline-offset-2
@@ -42,11 +35,8 @@ const Button: React.FC<ButtonProps> = ({
         disabled && "cursor-default opacity-50",
         fullWidth && "w-full",
         secondary ? "text-gray-900" : "text-white",
-        danger &&
-          "bg-rose-500 hover:bg-rose-600 focus-visible:outline-rose-600",
-        !secondary &&
-          !danger &&
-          "bg-orange-400 hover:bg-orange-600 focus-visible:outline-orange-600"
+        danger && "bg-rose-500 hover:bg-rose-600 focus-visible:outline-rose-600",
+        !secondary && !danger && "bg-orange-400 hover:bg-orange-600 focus-visible:outline-orange-600"
       )}
     >
       {children}

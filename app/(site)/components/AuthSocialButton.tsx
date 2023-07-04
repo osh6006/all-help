@@ -6,11 +6,7 @@ interface AuthSocialButtonProps {
   color?: string;
 }
 
-const AuthSocialButton: React.FC<AuthSocialButtonProps> = ({
-  icon: Icon,
-  onClick,
-  color,
-}) => {
+const AuthSocialButton: React.FC<AuthSocialButtonProps> = ({ icon: Icon, onClick, color }) => {
   return (
     <button
       type="button"
@@ -29,6 +25,8 @@ const AuthSocialButton: React.FC<AuthSocialButtonProps> = ({
         ring-gray-300
         hover:outline-offset-0
         ${color}
+        transition-colors
+        hover:bg-gray-200
   `}
     >
       <Icon />

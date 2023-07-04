@@ -17,6 +17,9 @@ model User {
   emailVerified  DateTime?
   image          String?
   role           String
+  company        String?
+  area           String?
+  companyImage   String?
   hashedPassword String?
   createdAt      DateTime  @default(now())
   updeatedAt     DateTime  @updatedAt
@@ -27,7 +30,7 @@ model User {
   seenMessageIds String[]  @db.ObjectId
   seenMessages   Message[] @relation("Seen", fields: [seenMessageIds], references: [id])
 
-  accounts Account[]
+  accounts Account[] 
   messages Message[]
 }
 
@@ -69,7 +72,7 @@ model Message {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   body      String?
   image     String?
-  createdat DateTime @default(now())
+  createdAt DateTime @default(now())
 
   seenIds String[] @db.ObjectId
   seen    User[]   @relation("Seen", fields: [seenIds], references: [id])

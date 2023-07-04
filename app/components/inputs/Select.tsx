@@ -1,45 +1,43 @@
 "use client";
 
+import { AreaObj } from "@/app/utils/serviceAgent";
 import clsx from "clsx";
 import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
 
-interface InputProps {
+interface SelectProps {
   label: string;
   id: string;
-  type?: string;
   required?: boolean;
   register: UseFormRegister<FieldValues>;
   errors: FieldErrors;
   disabled?: boolean;
-  accept?: string;
+  option?: AreaObj[];
 }
 
-const Input: React.FC<InputProps> = ({ label, id, type, required, register, errors, disabled, accept }) => {
+const Select: React.FC<SelectProps> = ({ label, id, required, register, errors, disabled, option }) => {
   return (
     <div>
       <label
-        className="
-            block
-            text-sm
-            font-medium
-            leading-6
-            text-gray-900
-        "
         htmlFor={id}
+        className="
+        block
+        text-sm
+        font-medium
+        leading-6
+        text-gray-900
+      "
       >
         {label}
       </label>
       <div className="mt-2">
-        <input
+        <select
           id={id}
-          type={type}
           autoComplete={id}
           disabled={disabled}
-          accept={accept}
           {...register(id, { required })}
           className={clsx(
             `
-            form-input
+            form-select
             block
             w-full
             rounded-md
@@ -59,10 +57,16 @@ const Input: React.FC<InputProps> = ({ label, id, type, required, register, erro
             errors[id] && "focus:ring-rose-500",
             disabled && "cursor-default opacity-50"
           )}
-        />
+        >
+          {option?.map((el, i) => (
+            <option key={el.value} value={el.value}>
+              {el.value}
+            </option>
+          ))}
+        </select>
       </div>
     </div>
   );
 };
 
-export default Input;
+export default Select;
