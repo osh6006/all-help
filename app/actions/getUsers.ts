@@ -15,10 +15,7 @@ const getUsers = async () => {
         createdAt: "desc",
       },
       where: {
-        NOT: {
-          // 세션에 있는 이메일 빼고 불러오기
-          email: session.user.email,
-        },
+        role: "agent",
       },
     });
 

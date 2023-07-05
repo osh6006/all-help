@@ -1,13 +1,16 @@
 "use client";
 
-import Avatar from "@/app/components/Avatar";
-import useOtherUser from "@/app/hooks/userOtherUser";
-import { FullConversationType } from "@/app/types";
-import clsx from "clsx";
+import { useCallback, useMemo } from "react";
+import { useRouter } from "next/navigation";
+import { Conversation, Message, User } from "@prisma/client";
 import { format } from "date-fns";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useCallback, useMemo } from "react";
+import clsx from "clsx";
+
+import Avatar from "@/app/components/Avatar";
+
+import { FullConversationType } from "@/app/types";
+import useOtherUser from "@/app/hooks/userOtherUser";
 
 interface ConversationBoxProps {
   data: FullConversationType;
@@ -21,16 +24,15 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({ data, selected }) => 
 
   const handleClick = useCallback(() => {
     router.push(`/conversations/${data.id}`);
-  }, [data.id, router]);
+  }, [data, router]);
 
   const lastMessage = useMemo(() => {
-    const message = data.messages || [];
-    return message[message.length - 1];
+    const messages = data.messages || [];
+
+    return messages[messages.length - 1];
   }, [data.messages]);
 
-  const userEmail = useMemo(() => {
-    return session.data?.user?.email;
-  }, [session?.data?.user?.email]);
+  const userEmail = useMemo(() => session.data?.user?.email, [session.data?.user?.email]);
 
   const hasSeen = useMemo(() => {
     if (!lastMessage) {
@@ -43,67 +45,53 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({ data, selected }) => 
       return false;
     }
 
-    return seenArray.filter((user) => user.email === user.email).length !== 0;
-  }, [lastMessage, userEmail]);
+    return seenArray.filter((user) => user.email === userEmail).length !== 0;
+  }, [userEmail, lastMessage]);
 
   const lastMessageText = useMemo(() => {
     if (lastMessage?.image) {
-      return `${data.name || otherUser.name}님이 이미지를 보냈습니다.`;
+      return "이미지를 보냈습니다.";
     }
 
     if (lastMessage?.body) {
-      return lastMessage.body;
+      return lastMessage?.body;
     }
 
     return "대화를 시작해 보세요";
-  }, [lastMessage, data.name, otherUser.name]);
+  }, [lastMessage]);
 
   return (
     <div
       onClick={handleClick}
       className={clsx(
         `
-    relative
-    flex
-    w-full
-    cursor-pointer
-    items-center
-    space-x-3
-    rounded-lg
-    p-3
-    transition
-    hover:bg-neutral-100
-  `,
+        relative 
+        flex 
+        w-full 
+        cursor-pointer 
+        items-center 
+        space-x-3 
+        rounded-lg
+        p-3
+        transition
+        hover:bg-neutral-100
+        `,
         selected ? "bg-neutral-100" : "bg-white"
       )}
     >
-      <Avatar user={otherUser} />
+      {<Avatar user={otherUser} />}
       <div className="min-w-0 flex-1">
         <div className="focus:outline-none">
-          <div
-            className="
-            mb-1
-            flex
-            items-center
-            justify-between
-          "
-          >
-            <p
-              className="
-              text-md 
-              font-medium
-              text-gray-900 
-              "
-            >
-              {data.name || otherUser.name}
-            </p>
+          <span className="absolute inset-0" aria-hidden="true" />
+          <div className="mb-1 flex items-center justify-between">
+            <p className="text-md font-medium text-gray-900">{data.name || otherUser.name}</p>
             {lastMessage?.createdAt && (
               <p
                 className="
-              text-xs
-              font-light
-              text-gray-400
-            "
+                  text-xs 
+                  font-light 
+                  text-gray-400
+                "
               >
                 {format(new Date(lastMessage.createdAt), "p")}
               </p>
@@ -112,9 +100,9 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({ data, selected }) => 
           <p
             className={clsx(
               `
-              turncate
+              truncate 
               text-sm
-            `,
+              `,
               hasSeen ? "text-gray-500" : "font-medium text-black"
             )}
           >

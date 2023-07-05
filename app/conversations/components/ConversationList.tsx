@@ -3,7 +3,6 @@
 import clsx from "clsx";
 import useConversation from "@/app/hooks/useConversation";
 import { FullConversationType } from "@/app/types";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { MdOutlineGroupAdd } from "react-icons/md";
 import ConversationBox from "./ConversationBox";
@@ -14,25 +13,23 @@ interface ConversationListProps {
 
 const ConversationList: React.FC<ConversationListProps> = ({ initialItems }) => {
   const [items, setItems] = useState(initialItems);
-  const router = useRouter();
-
   const { conversationId, isOpen } = useConversation();
 
   return (
     <aside
       className={clsx(
         `
-    fixed
-    inset-y-0
-    overflow-y-auto
-    border-r
-    border-gray-200
-    bg-white
-    pb-20
-    lg:left-20
-    lg:w-80
-    lg:pb-0
-  `,
+        fixed 
+        inset-y-0 
+        overflow-y-auto
+        border-r
+        border-gray-200 
+        pb-20 
+        lg:left-20
+        lg:block 
+        lg:w-80 
+        lg:pb-0 
+      `,
         isOpen ? "hidden" : "left-0 block w-full"
       )}
     >
@@ -40,9 +37,9 @@ const ConversationList: React.FC<ConversationListProps> = ({ initialItems }) => 
         <div className="mb-4 flex justify-between pt-4">
           <div
             className="
-          text-xl
-          font-bold
-          text-neutral-800
+            text-xl
+            font-bold
+            text-neutral-800
           "
           >
             Messages
