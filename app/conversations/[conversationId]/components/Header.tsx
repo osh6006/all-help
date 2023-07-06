@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { HiChevronLeft } from "react-icons/hi";
 import { FiMoreHorizontal } from "react-icons/fi";
+import ProfileDrawer from "./ProfileDrawer";
 
 interface HeaderProps {
   conversation: Conversation & {
@@ -28,8 +29,10 @@ const Header: React.FC<HeaderProps> = ({ conversation }) => {
   }, [conversation]);
 
   return (
-    <div
-      className="
+    <>
+      <ProfileDrawer data={conversation} isOpen={drawerOpen} onClose={() => setDrawerOpen(false)} />
+      <div
+        className="
         flex
         w-full
         items-center
@@ -42,37 +45,38 @@ const Header: React.FC<HeaderProps> = ({ conversation }) => {
         sm:px-4
         lg:px-6
     "
-    >
-      <div className="flex items-center gap-3">
-        <Link
-          className="
+      >
+        <div className="flex items-center gap-3">
+          <Link
+            className="
          block
          cursor-pointer
          text-orange-500
          hover:text-orange-600
          lg:hidden
         "
-          href="/conversations"
-        >
-          <HiChevronLeft size={32} />
-        </Link>
-        <Avatar user={otherUser} />
-        <div className="flex flex-col">
-          <div>{conversation.name || otherUser.name}</div>
-          <div className=" text-sm font-light text-neutral-500">{statusText}</div>
+            href="/conversations"
+          >
+            <HiChevronLeft size={32} />
+          </Link>
+          <Avatar user={otherUser} />
+          <div className="flex flex-col">
+            <div>{conversation.name || otherUser.name}</div>
+            <div className=" text-sm font-light text-neutral-500">{statusText}</div>
+          </div>
         </div>
-      </div>
-      <FiMoreHorizontal
-        size={32}
-        onClick={() => {}}
-        className="
+        <FiMoreHorizontal
+          size={32}
+          onClick={() => setDrawerOpen(true)}
+          className="
         cursor-pointer
         text-orange-500
         transition
         hover:text-orange-600
        "
-      />
-    </div>
+        />
+      </div>
+    </>
   );
 };
 

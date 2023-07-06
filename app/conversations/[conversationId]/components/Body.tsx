@@ -21,7 +21,7 @@ const Body: React.FC<BodyProps> = ({ initialMessages }) => {
   }, [conversationId]);
 
   return (
-    <div className="flex-1 overflow-y-auto">
+    <div className="flex-1 overflow-y-auto scrollbar-hide">
       {messages?.map((message, i) => (
         <MessageBox isLast={i === messages.length - 1} key={message.id} data={message} />
       ))}
