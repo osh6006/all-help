@@ -2,12 +2,16 @@
 
 import { User } from "@prisma/client";
 import Image from "next/image";
+import useActiveList from "../hooks/useActiveList";
 
 interface AvatarProps {
   user?: User;
 }
 
 const Avatar: React.FC<AvatarProps> = ({ user }) => {
+  const { members } = useActiveList();
+  const isActive = members.indexOf(user?.email!) !== -1;
+
   return (
     <div className="relative">
       <div
@@ -22,10 +26,16 @@ const Avatar: React.FC<AvatarProps> = ({ user }) => {
         md:w-11
       "
       >
-        <Image alt="Avatar" src={user?.image || "/images/placeholder.jpg"} fill />
+        <Image
+          alt="Avatar"
+          src={user?.image || "/images/placeholder.jpg"}
+          fill
+        />
       </div>
-      <span
-        className="
+
+      {isActive && (
+        <span
+          className="
           absolute
           right-0
           top-0
@@ -39,7 +49,8 @@ const Avatar: React.FC<AvatarProps> = ({ user }) => {
           md:h-3
           md:w-3
       "
-      />
+        />
+      )}
     </div>
   );
 };

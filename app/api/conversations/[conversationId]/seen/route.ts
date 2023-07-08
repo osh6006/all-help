@@ -1,6 +1,7 @@
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import { NextResponse } from "next/server";
 import prisma from "@/app/libs/prismadb";
+import { pusherServer } from "@/app/libs/pusher";
 
 interface Iprams {
   conversationId?: string;
@@ -39,7 +40,7 @@ export async function POST(request: Request, { params }: { params: Iprams }) {
       return NextResponse.json(conversation);
     }
 
-    // Update seen of last message
+    // 마지막 메세지를 본 것으로 간주하기 때문에 업데이트
     const updatedMessage = await prisma.message.update({
       where: {
         id: lastMessage.id,
@@ -56,6 +57,23 @@ export async function POST(request: Request, { params }: { params: Iprams }) {
         },
       },
     });
+
+    // Update all connections with new seen
+    await pusherServer.trigger(currentUser.email, "conversation:update", {
+      id: conversationId,
+      messages: [updatedMessage],
+    });
+
+    if (lastMessage.seenIds.indexOf(currentUser.id) !== -1) {
+      return NextResponse.json(conversation);
+    }
+
+    // Update last message seen
+    await pusherServer.trigger(
+      conversationId!,
+      "message:update",
+      updatedMessage
+    );
 
     return NextResponse.json(updatedMessage);
   } catch (error) {

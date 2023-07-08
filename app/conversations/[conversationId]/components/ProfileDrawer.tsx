@@ -11,6 +11,7 @@ import useOtherUser from "@/app/hooks/userOtherUser";
 import Avatar from "@/app/components/Avatar";
 import ConfirmModal from "./ConfirmModal";
 import AvatarGroup from "@/app/components/AvatarGroup";
+import useActiveList from "@/app/hooks/useActiveList";
 
 interface ProfileDrawerProps {
   isOpen: boolean;
@@ -20,9 +21,15 @@ interface ProfileDrawerProps {
   };
 }
 
-const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ isOpen, onClose, data }) => {
+const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
+  isOpen,
+  onClose,
+  data,
+}) => {
   const otherUser = useOtherUser(data);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const { members } = useActiveList();
+  const isActive = members.indexOf(otherUser?.email!) !== -1;
 
   const joinedDate = useMemo(() => {
     return format(new Date(otherUser.createdAt), "PP");
@@ -36,12 +43,15 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ isOpen, onClose, data }) 
     if (data.isGroup) {
       return `${data.users.length} 멤버들`;
     }
-    return "활동중";
-  }, [data]);
+    return isActive ? "활동중" : "오프라인";
+  }, [data, isActive]);
 
   return (
     <>
-      <ConfirmModal isOpen={confirmOpen} onClose={() => setConfirmOpen(false)} />
+      <ConfirmModal
+        isOpen={confirmOpen}
+        onClose={() => setConfirmOpen(false)}
+      />
       <Transition.Root show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-40" onClose={() => {}}>
           <Transition.Child
@@ -87,10 +97,16 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ isOpen, onClose, data }) 
                       <div className="relative mt-6 flex-1 px-4 sm:px-6">
                         <div className="flex flex-col items-center">
                           <div className="mb-2">
-                            {data.isGroup ? <AvatarGroup users={data.users} /> : <Avatar user={otherUser} />}
+                            {data.isGroup ? (
+                              <AvatarGroup users={data.users} />
+                            ) : (
+                              <Avatar user={otherUser} />
+                            )}
                           </div>
                           <div>{title}</div>
-                          <div className="text-sm text-gray-500">{statusText}</div>
+                          <div className="text-sm text-gray-500">
+                            {statusText}
+                          </div>
                           <div className="my-8 flex gap-10">
                             <div
                               onClick={() => setConfirmOpen(true)}
@@ -99,7 +115,9 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ isOpen, onClose, data }) 
                               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-100">
                                 <IoMdTrash size={20} />
                               </div>
-                              <div className="text-sm font-light text-neutral-600">대화방 나가기</div>
+                              <div className="text-sm font-light text-neutral-600">
+                                대화방 나가기
+                              </div>
                             </div>
                           </div>
                           <div className="w-full pb-5 pt-5 sm:px-0 sm:pt-0">
@@ -125,7 +143,9 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ isOpen, onClose, data }) 
                                   sm:col-span-2
                                 "
                                   >
-                                    {data.users.map((user) => user.email).join(", ")}
+                                    {data.users
+                                      .map(user => user.email)
+                                      .join(", ")}
                                   </dd>
                                 </div>
                               )}
@@ -177,7 +197,9 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ isOpen, onClose, data }) 
                                     sm:col-span-2
                                   "
                                     >
-                                      <time dateTime={joinedDate}>{joinedDate}</time>
+                                      <time dateTime={joinedDate}>
+                                        {joinedDate}
+                                      </time>
                                     </dd>
                                   </div>
                                 </>
