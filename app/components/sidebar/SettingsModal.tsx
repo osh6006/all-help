@@ -4,7 +4,12 @@ import { User } from "@prisma/client";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { FieldValue, FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import {
+  FieldValue,
+  FieldValues,
+  SubmitHandler,
+  useForm,
+} from "react-hook-form";
 import { toast } from "react-hot-toast";
 import Modal from "../Modal";
 import Input from "../inputs/Input";
@@ -18,7 +23,11 @@ interface SettingsModalProps {
   currentUser: User;
 }
 
-const SettingsModal: React.FC<SettingsModalProps> = ({ onClose, isOpen, currentUser }) => {
+const SettingsModal: React.FC<SettingsModalProps> = ({
+  onClose,
+  isOpen,
+  currentUser,
+}) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const {
@@ -41,7 +50,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ onClose, isOpen, currentU
     });
   };
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+  const onSubmit: SubmitHandler<FieldValues> = data => {
     setIsLoading(true);
     axios
       .post("/api/settings", data)
@@ -63,8 +72,12 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ onClose, isOpen, currentU
       >
         <div className="space-y-12">
           <div className="border-b border-gray-900/10 pb-12">
-            <h2 className="text-base font-semibold leading-7 text-gray-900">프로필 수정</h2>
-            <p className="mt-1 text-sm leading-6 text-gray-600">내 정보를 수정해 보세요.</p>
+            <h2 className="text-base font-semibold leading-7 text-gray-900">
+              프로필 수정
+            </h2>
+            <p className="mt-1 text-sm leading-6 text-gray-600">
+              내 정보를 수정해 보세요.
+            </p>
             <div
               className="
               mt-10
@@ -73,7 +86,14 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ onClose, isOpen, currentU
               gap-y-8
             "
             >
-              <Input id="name" label="이름" errors={errors} required register={register} disabled={isLoading} />
+              <Input
+                id="name"
+                label="이름"
+                errors={errors}
+                required
+                register={register}
+                disabled={isLoading}
+              />
               <div>
                 <label
                   className="
@@ -98,10 +118,16 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ onClose, isOpen, currentU
                     width="48"
                     height="48"
                     className="rounded-full"
-                    src={image || currentUser?.image || "/image/placeholder.jpg"}
+                    src={
+                      image || currentUser?.image || "/images/placeholder.jpg"
+                    }
                     alt="Avatar"
                   />
-                  <CldUploadButton options={{ maxFiles: 1 }} onUpload={handleUpload} uploadPreset="m5qf4qmx">
+                  <CldUploadButton
+                    options={{ maxFiles: 1 }}
+                    onUpload={handleUpload}
+                    uploadPreset="m5qf4qmx"
+                  >
                     <Button disabled={isLoading} secondary type="button">
                       바꾸기
                     </Button>
