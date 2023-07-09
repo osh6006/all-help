@@ -7,11 +7,16 @@ interface MobileItemProps {
   label: string;
   icon: any;
   href: string;
-  onClick?: () => void;
+  onClick?: () => void | undefined;
   active?: boolean;
 }
 
-const MobileItem: React.FC<MobileItemProps> = ({ href, icon: Icon, active, onClick }) => {
+const MobileItem: React.FC<MobileItemProps> = ({
+  href,
+  icon: Icon,
+  active,
+  onClick,
+}) => {
   const handleClick = () => {
     if (onClick) return onClick();
   };

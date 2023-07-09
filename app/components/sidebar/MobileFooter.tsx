@@ -27,14 +27,16 @@ const MobileFooter = () => {
         lg:hidden
     "
     >
-      {routes.map((route) => (
+      {routes.map(route => (
         <MobileItem
           key={route.href}
           label={route.label}
           href={route.href}
           active={route.active}
           icon={route.icon}
-          onClick={route.onClick}
+
+          // footer 메뉴에 onclick을 할 경우 사용
+          // onClick={route.onClick}
         />
       ))}
     </div>
