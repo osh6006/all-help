@@ -1,8 +1,6 @@
-import { signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 import { HiChat, HiUsers, HiHome, HiSearch } from "react-icons/hi";
-import { RiLogoutBoxLine } from "react-icons/ri";
 import useConversation from "./useConversation";
 
 const useRoute = () => {
@@ -13,9 +11,9 @@ const useRoute = () => {
     () => [
       {
         label: "Home",
-        href: "/home",
+        href: "/",
         icon: HiHome,
-        active: pathname === "/home" || !!conversationId,
+        active: pathname === "/" || !!conversationId,
       },
       {
         label: "Chat",

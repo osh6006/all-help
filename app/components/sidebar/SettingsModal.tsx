@@ -16,6 +16,7 @@ import Input from "../inputs/Input";
 import Image from "next/image";
 import { CldUploadButton } from "next-cloudinary";
 import Button from "../Button";
+import { signOut } from "next-auth/react";
 
 interface SettingsModalProps {
   isOpen?: boolean;
@@ -155,6 +156,15 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
           </div>
         </div>
       </form>
+      <Button
+        disabled={isLoading}
+        onClick={() => {
+          signOut();
+          onClose();
+        }}
+      >
+        로그아웃
+      </Button>
     </Modal>
   );
 };

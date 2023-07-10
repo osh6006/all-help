@@ -6,6 +6,9 @@ import { DesktopItem } from "./DesktopItem";
 import { User } from "@prisma/client";
 import Avatar from "../Avatar";
 import SettingsModal from "./SettingsModal";
+import Button from "../Button";
+import { useRouter } from "next/navigation";
+import { MdLogin } from "react-icons/md";
 
 interface DesktopSidebarProps {
   currentUser: User;
@@ -14,6 +17,7 @@ interface DesktopSidebarProps {
 const DesktopSidebar: React.FC<DesktopSidebarProps> = ({ currentUser }) => {
   const routes = useRoute();
   const [isOpen, setIsOpen] = useState(false);
+  const route = useRouter();
 
   return (
     <>
@@ -71,26 +75,50 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = ({ currentUser }) => {
           </ul>
         </nav>
 
-        <nav
-          className="
+        {/* 로그인이 되어 있다면 */}
+        {currentUser?.email && (
+          <nav
+            className="
         mt-4
         flex
         flex-col
         items-center
         justify-between
       "
-        >
-          <div
-            onClick={() => setIsOpen(true)}
-            className="
+          >
+            <div
+              onClick={() => setIsOpen(true)}
+              className="
             cursor-pointer
             transition
             hover:opacity-75
         "
+            >
+              <Avatar user={currentUser!} />
+            </div>
+          </nav>
+        )}
+
+        {/* 로그인이 되어있지 않을 경우 */}
+        {!currentUser?.email && (
+          <div
+            className="
+            mx-3.5
+            flex
+            cursor-pointer
+            flex-col
+            items-center
+            justify-between
+            rounded-md
+            py-3
+            text-gray-500
+            hover:bg-gray-100
+            hover:text-gray-900
+          "
           >
-            <Avatar user={currentUser!} />
+            <MdLogin className="h-6 w-6" />
           </div>
-        </nav>
+        )}
       </div>
     </>
   );
