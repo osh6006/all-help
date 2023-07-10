@@ -9,6 +9,7 @@ import SettingsModal from "./SettingsModal";
 import Button from "../Button";
 import { useRouter } from "next/navigation";
 import { MdLogin } from "react-icons/md";
+import Link from "next/link";
 
 interface DesktopSidebarProps {
   currentUser: User;
@@ -101,23 +102,32 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = ({ currentUser }) => {
 
         {/* 로그인이 되어있지 않을 경우 */}
         {!currentUser?.email && (
-          <div
+          <Link
+            href={"/signIn"}
             className="
-            mx-3.5
             flex
-            cursor-pointer
-            flex-col
             items-center
-            justify-between
-            rounded-md
-            py-3
-            text-gray-500
-            hover:bg-gray-100
-            hover:text-gray-900
-          "
+            justify-center
+            "
           >
-            <MdLogin className="h-6 w-6" />
-          </div>
+            <div
+              className="
+              group
+              flex
+              gap-x-3
+              rounded-md
+              p-3
+              text-sm
+              font-semibold
+              leading-6
+              text-gray-500
+              hover:bg-gray-100
+              hover:text-black
+            "
+            >
+              <MdLogin className="h-6 w-6 shrink-0" />
+            </div>
+          </Link>
         )}
       </div>
     </>
