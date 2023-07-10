@@ -10,7 +10,12 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "All Help",
-  description: "All Help Chat",
+  description: "모든 고객들을 위한 모든 서비스 센터 들을 위한 사이트",
+  Author: "ohs6006@gmail.com",
+  openGraph: {
+    title: "All Help",
+    description: "모든 고객들을 위한 모든 서비스 센터 들을 위한 사이트",
+  },
 };
 
 export default function RootLayout({
