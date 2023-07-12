@@ -23,7 +23,7 @@ const Header: React.FC<HeaderProps> = ({ currentUser }) => {
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
       />
-      <div className="px-5">
+      <div className="px-5 lg:hidden">
         <div className="flex items-center justify-between">
           <div
             className="
@@ -32,9 +32,7 @@ const Header: React.FC<HeaderProps> = ({ currentUser }) => {
                 font-bold
                 text-neutral-800
             "
-          >
-            Home
-          </div>
+          ></div>
 
           {/* 로그인 되어있을 경우 */}
           {currentUser?.email && (

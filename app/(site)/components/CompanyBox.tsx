@@ -1,17 +1,17 @@
 "use client";
 
 import Avatar from "@/app/components/Avatar";
-import LoadingModal from "@/app/components/LoadingModal";
 import { User } from "@prisma/client";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
+import { BiTime, BiSolidPhone } from "react-icons/bi";
+import { FaFireAlt } from "react-icons/fa";
 
-interface UserBoxProps {
+interface CompanyBoxProps {
   data: User;
 }
-
-const UserBox: React.FC<UserBoxProps> = ({ data }) => {
+const CompanyBox: React.FC<CompanyBoxProps> = ({ data }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -29,7 +29,10 @@ const UserBox: React.FC<UserBoxProps> = ({ data }) => {
 
   return (
     <>
-      {isLoading && <LoadingModal />}
+      <div className="my-5 flex items-center gap-2">
+        <FaFireAlt size={18} className=" text-red-600" />
+        가장 인기있는 서비스 센터
+      </div>
       <div
         onClick={handleClick}
         className="
@@ -38,7 +41,8 @@ const UserBox: React.FC<UserBoxProps> = ({ data }) => {
         w-full
         cursor-pointer
         items-center
-        space-x-3
+        justify-between
+        gap-6
         rounded-lg
         bg-white
         p-3
@@ -57,15 +61,22 @@ const UserBox: React.FC<UserBoxProps> = ({ data }) => {
                     justify-between
                 "
             >
-              <p
+              <div
                 className="
+                        space-y-0
                         text-sm
                         font-medium
                         text-gray-900
                     "
               >
-                {data.name}
-              </p>
+                <p className="mb-1 text-base">삼성 전자 서비스 센터</p>
+                <p className="flex items-center gap-2 text-xs text-gray-500">
+                  <BiTime className="text-red-500" /> 17:00 ~ 20:00
+                </p>
+                <p className="flex items-center gap-2 text-xs text-gray-500">
+                  <BiSolidPhone className="text-green-500" /> 02-123-4567
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -74,4 +85,4 @@ const UserBox: React.FC<UserBoxProps> = ({ data }) => {
   );
 };
 
-export default UserBox;
+export default CompanyBox;
