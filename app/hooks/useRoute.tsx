@@ -4,8 +4,7 @@ import { HiChat, HiUsers, HiHome, HiSearch } from "react-icons/hi";
 import useConversation from "./useConversation";
 
 const useRoute = () => {
-  const pathname = usePathname();
-  const { conversationId } = useConversation();
+  const pathname = usePathname()?.split("/")[1];
 
   const routes = useMemo(
     () => [
@@ -13,28 +12,28 @@ const useRoute = () => {
         label: "Home",
         href: "/",
         icon: HiHome,
-        active: pathname === "/" || !!conversationId,
+        active: pathname === "",
       },
       {
         label: "Chat",
         href: "/conversations",
         icon: HiChat,
-        active: pathname === "/conversations" || !!conversationId,
+        active: pathname === "conversations",
       },
       {
         label: "Users",
         href: "/users",
         icon: HiUsers,
-        active: pathname === "/users",
+        active: pathname === "users",
       },
       {
         label: "Search",
         href: "/search",
         icon: HiSearch,
-        active: pathname === "/search",
+        active: pathname === "search",
       },
     ],
-    [pathname, conversationId]
+    [pathname]
   );
 
   return routes;
