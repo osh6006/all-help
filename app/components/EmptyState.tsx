@@ -1,4 +1,10 @@
-const EmptyState = () => {
+interface EmptyStateProps {
+  title?: string;
+}
+
+const EmptyState = ({
+  title = "탭을 클릭 후 새로운 대화를 시작해 보세요!",
+}: EmptyStateProps) => {
   return (
     <div
       className="
@@ -22,7 +28,7 @@ const EmptyState = () => {
           text-gray-900
         "
         >
-          채팅창을 선택하거나 새로운 대화를 시작해 보세요!
+          {title}
         </h3>
       </div>
     </div>

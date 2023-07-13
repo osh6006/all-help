@@ -5,13 +5,13 @@ import { User } from "@prisma/client";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
-import { BiTime, BiSolidPhone } from "react-icons/bi";
-import { FaFireAlt } from "react-icons/fa";
+import { BiSolidPhone, BiTime } from "react-icons/bi";
 
-interface CompanyBoxProps {
+interface SearchResultBoxProps {
   data: User;
 }
-const CompanyBox: React.FC<CompanyBoxProps> = ({ data }) => {
+
+const SearchResultBox: React.FC<SearchResultBoxProps> = ({ data }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -29,10 +29,6 @@ const CompanyBox: React.FC<CompanyBoxProps> = ({ data }) => {
 
   return (
     <>
-      <div className="my-5 flex items-center gap-2">
-        <FaFireAlt size={18} className=" text-red-600" />
-        가장 인기있는 서비스 센터
-      </div>
       <div
         onClick={handleClick}
         className="
@@ -85,4 +81,4 @@ const CompanyBox: React.FC<CompanyBoxProps> = ({ data }) => {
   );
 };
 
-export default CompanyBox;
+export default SearchResultBox;
