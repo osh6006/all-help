@@ -32,7 +32,13 @@ const NewTimePicker: React.FC<NewTimePickerProps> = ({
           minuteStep={minuteStep}
           showSecond={false}
           use12Hours
-          onChange={e => setFirstTime(e.format("LT"))}
+          onChange={e => {
+            if (e) {
+              setFirstTime(e.format("LT"));
+            } else {
+              setFirstTime("");
+            }
+          }}
         />
         <span>~</span>
         <TimePicker
@@ -40,7 +46,13 @@ const NewTimePicker: React.FC<NewTimePickerProps> = ({
           minuteStep={minuteStep}
           showSecond={false}
           use12Hours
-          onChange={e => setSecondTime(e.format("LT"))}
+          onChange={e => {
+            if (e) {
+              setSecondTime(e.format("LT"));
+            } else {
+              setSecondTime("");
+            }
+          }}
         />
       </div>
       {error && (

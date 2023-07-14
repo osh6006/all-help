@@ -12,9 +12,19 @@ interface SelectProps {
   errors: FieldErrors;
   disabled?: boolean;
   option?: AreaObj[];
+  validation?: any;
 }
 
-const Select: React.FC<SelectProps> = ({ label, id, required, register, errors, disabled, option }) => {
+const Select: React.FC<SelectProps> = ({
+  label,
+  id,
+  required,
+  register,
+  errors,
+  disabled,
+  option,
+  validation,
+}) => {
   return (
     <div>
       <label
@@ -34,7 +44,7 @@ const Select: React.FC<SelectProps> = ({ label, id, required, register, errors, 
           id={id}
           autoComplete={id}
           disabled={disabled}
-          {...register(id, { required })}
+          {...register(id, validation)}
           className={clsx(
             `
             form-select
@@ -65,6 +75,9 @@ const Select: React.FC<SelectProps> = ({ label, id, required, register, errors, 
           ))}
         </select>
       </div>
+      <p className="mt-2 text-xs text-rose-400">
+        {errors[id] && <span>{errors[id]?.message as React.ReactNode}</span>}
+      </p>
     </div>
   );
 };

@@ -46,7 +46,10 @@ const ServiceAuthForm = () => {
     setIsLoading(true);
     // 서버에 가입 요청
 
+    console.log(compareTimes(firstTime, secondTime));
+
     if (compareTimes(firstTime, secondTime) === 2) {
+      const newData = { ...data, businessHours: `${firstTime},${secondTime}` };
       axios
         .post("/api/agentRegister", data)
         .then(() => {
@@ -55,7 +58,10 @@ const ServiceAuthForm = () => {
           router.push("/");
         })
         .catch(() => toast.error("잘못 입력하셨습니다 !"))
-        .finally(() => setIsLoading(false));
+        .finally(() => {
+          setIsLoading(false);
+          setTimeError(false);
+        });
     } else {
       setTimeError(true);
     }
@@ -89,20 +95,28 @@ const ServiceAuthForm = () => {
         items-center
         gap-3
         sm:grid-cols-2
-        
         "
           onSubmit={handleSubmit(onSubmit)}
         >
-          <div className="">
-            <Input
-              id="name"
-              label="이름"
-              register={register}
-              errors={errors}
-              disabled={isLoading}
-              required
-            />
-          </div>
+          <Input
+            id="name"
+            label="이름"
+            register={register}
+            errors={errors}
+            disabled={isLoading}
+            required
+            validation={{
+              required: "이름을 입력해주세요.",
+              minLength: {
+                value: 2,
+                message: "이름은 2글자 이상이어야 합니다.",
+              },
+              pattern: {
+                value: /^[가-힣]+$/,
+                message: "한글만 입력 가능합니다.",
+              },
+            }}
+          />
 
           <Input
             id="email"
@@ -112,6 +126,13 @@ const ServiceAuthForm = () => {
             errors={errors}
             disabled={isLoading}
             required
+            validation={{
+              required: "이메일을 입력해주세요.",
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: "유효한 이메일 주소를 입력해주세요.",
+              },
+            }}
           />
           <Input
             id="password"
@@ -120,6 +141,19 @@ const ServiceAuthForm = () => {
             register={register}
             errors={errors}
             disabled={isLoading}
+            validation={{
+              required: "비밀번호를 입력해주세요.",
+              minLength: {
+                value: 8,
+                message: "비밀번호는 최소 8자 이상이어야 합니다.",
+              },
+              pattern: {
+                value:
+                  /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).*$/,
+                message:
+                  "비밀번호는 숫자, 특수 문자를 포함한 영문 조합이어야 합니다.",
+              },
+            }}
           />
           <Input
             id="company"
@@ -128,8 +162,11 @@ const ServiceAuthForm = () => {
             errors={errors}
             disabled={isLoading}
             required
+            validation={{
+              required: "회사 이름을 입력해주세요.",
+            }}
           />
-          <div className="col-span-2">
+          <div className="sm:col-span-2">
             <Select
               id="area"
               label="지역"
@@ -137,6 +174,9 @@ const ServiceAuthForm = () => {
               errors={errors}
               disabled={isLoading}
               required
+              validation={{
+                required: "지역을 선택해 주세요.",
+              }}
               option={AreaArray.sort((a, b) => {
                 const nameA = a.name.toUpperCase();
                 const nameB = b.name.toUpperCase();
@@ -152,7 +192,7 @@ const ServiceAuthForm = () => {
             />
           </div>
 
-          <div className="col-span-2 flex items-center gap-2">
+          <div className="flex items-center gap-2 sm:col-span-2">
             <NewTimePicker
               setFirstTime={setFirstTime}
               setSecondTime={setSecondTime}
@@ -162,10 +202,10 @@ const ServiceAuthForm = () => {
             />
           </div>
 
-          <div className="col-span-2">
+          <div className="sm:col-span-2">
             <Input
               id="companyImage"
-              label="Company Image"
+              label="회사 이미지(로고)"
               type="file"
               register={register}
               errors={errors}
@@ -174,7 +214,7 @@ const ServiceAuthForm = () => {
             />
           </div>
 
-          <div className="col-span-2">
+          <div className="sm:col-span-2">
             <Button disabled={isLoading} type="submit" fullWidth>
               회원 가입
             </Button>
@@ -208,39 +248,29 @@ const ServiceAuthForm = () => {
 export default ServiceAuthForm;
 
 function compareTimes(time1: string, time2: string): number {
-  const [hour1, minute1, period1] = getTimeComponents(time1);
-  const [hour2, minute2, period2] = getTimeComponents(time2);
+  const timeFormat = /(\d+):(\d+)\s*(\w+)/;
+  const [, hour1, minute1, meridiem1] = time1.match(timeFormat) || [];
+  const [, hour2, minute2, meridiem2] = time2.match(timeFormat) || [];
 
-  // 시간을 24시간 형식으로 변환하여 비교합니다.
-  const convertedTime1 = convertTo24HourFormat(hour1, minute1, period1);
-  const convertedTime2 = convertTo24HourFormat(hour2, minute2, period2);
+  if (!hour1 || !minute1 || !meridiem1 || !hour2 || !minute2 || !meridiem2) {
+    return 0;
+  }
 
-  if (convertedTime1 > convertedTime2) {
+  const formattedTime1 = `${
+    parseInt(hour1) + (meridiem1.toLowerCase() === "pm" ? 12 : 0)
+  }:${minute1}`;
+  const formattedTime2 = `${
+    parseInt(hour2) + (meridiem2.toLowerCase() === "pm" ? 12 : 0)
+  }:${minute2}`;
+
+  const date1 = new Date(`2000-01-01T${formattedTime1}`);
+  const date2 = new Date(`2000-01-01T${formattedTime2}`);
+
+  if (date1 > date2) {
     return 1;
-  } else if (convertedTime1 < convertedTime2) {
+  } else if (date1 < date2) {
     return 2;
   } else {
     return 0;
   }
-}
-
-function getTimeComponents(time: string): [number, number, string] {
-  const [timeString, period] = time.split(" ");
-  const [hourString, minuteString] = timeString.split(":");
-  const hour = parseInt(hourString);
-  const minute = parseInt(minuteString);
-
-  return [hour, minute, period];
-}
-
-function convertTo24HourFormat(hour: number, minute: number, period: string) {
-  let convertedHour = hour;
-
-  if (period === "PM" && hour !== 12) {
-    convertedHour += 12;
-  } else if (period === "AM" && hour === 12) {
-    convertedHour = 0;
-  }
-
-  return convertedHour * 60 + minute;
 }

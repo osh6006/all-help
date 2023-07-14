@@ -1,6 +1,7 @@
 "use client";
 
 import clsx from "clsx";
+import { validateOptions } from "pusher-js/types/src/core/options";
 import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
 
 interface InputProps {
@@ -12,9 +13,20 @@ interface InputProps {
   errors: FieldErrors;
   disabled?: boolean;
   accept?: string;
+  validation?: any;
 }
 
-const Input: React.FC<InputProps> = ({ label, id, type, required, register, errors, disabled, accept }) => {
+const Input: React.FC<InputProps> = ({
+  label,
+  id,
+  type,
+  required,
+  register,
+  errors,
+  disabled,
+  accept,
+  validation,
+}) => {
   return (
     <div>
       <label
@@ -36,7 +48,7 @@ const Input: React.FC<InputProps> = ({ label, id, type, required, register, erro
           autoComplete={id}
           disabled={disabled}
           accept={accept}
-          {...register(id, { required })}
+          {...register(id, validation)}
           className={clsx(
             `
             form-input
@@ -61,6 +73,9 @@ const Input: React.FC<InputProps> = ({ label, id, type, required, register, erro
           )}
         />
       </div>
+      <p className="mt-2 text-xs text-rose-400">
+        {errors[id] && <span>{errors[id]?.message as React.ReactNode}</span>}
+      </p>
     </div>
   );
 };
