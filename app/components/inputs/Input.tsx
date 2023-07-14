@@ -14,6 +14,7 @@ interface InputProps {
   disabled?: boolean;
   accept?: string;
   validation?: any;
+  placeHolder?: string;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -26,6 +27,7 @@ const Input: React.FC<InputProps> = ({
   disabled,
   accept,
   validation,
+  placeHolder,
 }) => {
   return (
     <div>
@@ -49,6 +51,7 @@ const Input: React.FC<InputProps> = ({
           disabled={disabled}
           accept={accept}
           {...register(id, validation)}
+          placeholder={placeHolder}
           className={clsx(
             `
             form-input

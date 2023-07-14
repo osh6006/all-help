@@ -167,6 +167,25 @@ const ServiceAuthForm = () => {
             }}
           />
           <div className="sm:col-span-2">
+            <Input
+              id="phoneNumber"
+              label="회사 번호"
+              register={register}
+              errors={errors}
+              disabled={isLoading}
+              required
+              placeHolder="02-1234-5678 | 010-1234-5678"
+              validation={{
+                required: "회사 번호를 입력해주세요.",
+                pattern: {
+                  value:
+                    /^0(1[0]|2|3[1-3]|4[1-4]|5[1-5]|6[1-4])-?([0-9]{3,4})-?([0-9]{4})$/,
+                  message: "유효한 전화번호를 입력해주세요.",
+                },
+              }}
+            />
+          </div>
+          <div className="sm:col-span-2">
             <Select
               id="area"
               label="지역"
@@ -234,7 +253,7 @@ const ServiceAuthForm = () => {
         >
           <div>이미 계정이 있으신가요?</div>
           <div
-            onClick={() => router.push("/")}
+            onClick={() => router.push("/signIn")}
             className="cursor-pointer underline"
           >
             로그인 하기
