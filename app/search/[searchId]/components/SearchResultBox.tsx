@@ -65,12 +65,12 @@ const SearchResultBox: React.FC<SearchResultBoxProps> = ({ data }) => {
                         text-gray-900
                     "
               >
-                <p className="mb-1 text-base">삼성 전자 서비스 센터</p>
+                <p className="mb-1 text-base">{data.company}</p>
                 <p className="flex items-center gap-2 text-xs text-gray-500">
-                  <BiTime className="text-red-500" /> 17:00 ~ 20:00
+                  <BiTime className="text-red-500" /> {data.businessHours}
                 </p>
                 <p className="flex items-center gap-2 text-xs text-gray-500">
-                  <BiSolidPhone className="text-green-500" /> 02-123-4567
+                  <BiSolidPhone className="text-green-500" /> {data.cphone}
                 </p>
               </div>
             </div>

@@ -17,7 +17,15 @@ export async function POST(request: Request) {
       businessHours,
     } = body;
 
-    if (!email || !name || !password || !company || !area) {
+    if (
+      !email ||
+      !name ||
+      !password ||
+      !company ||
+      !area ||
+      !businessHours ||
+      !cphone
+    ) {
       return new NextResponse("Missing Info", { status: 400 });
     }
 

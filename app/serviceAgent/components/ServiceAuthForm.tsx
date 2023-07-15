@@ -58,9 +58,12 @@ const ServiceAuthForm = () => {
     // 서버에 가입 요청
 
     if (compareTimes(firstTime, secondTime) === 2) {
-      const newData = { ...data, businessHours: `${firstTime},${secondTime}` };
+      const newData = {
+        ...data,
+        businessHours: `${firstTime} ~ ${secondTime}`,
+      };
       axios
-        .post("/api/agentRegister", data)
+        .post("/api/agentRegister", newData)
         .then(() => {
           toast.success("가입이 완료되었습니다 로그인을 해주세요");
           reset();
@@ -232,18 +235,35 @@ const ServiceAuthForm = () => {
 
           <div className="sm:col-span-2">
             <div className="text-sm">회사 이미지(로고)</div>
-            <Image
-              width="48"
-              height="48"
-              className="mt-2 rounded-full"
-              src={image || "/images/placeholder.jpg"}
-              alt="Avatar"
-            />
-            <CldUploadButton
-              options={{ maxFiles: 1 }}
-              onUpload={handleUpload}
-              uploadPreset="m5qf4qmx"
-            ></CldUploadButton>
+            <div className="flex items-center justify-around text-sm">
+              <Image
+                width="60"
+                height="60"
+                className="mt-2 rounded-full"
+                src={image || "/images/placeholder.jpg"}
+                alt="Avatar"
+              />
+              <div
+                className="
+                  rounded-md 
+                  border-2 
+                  border-orange-400 
+                  p-2 
+                  font-semibold 
+                  transition 
+                  hover:bg-orange-400
+                  hover:text-white
+                "
+              >
+                <CldUploadButton
+                  options={{ maxFiles: 1 }}
+                  onUpload={handleUpload}
+                  uploadPreset="m5qf4qmx"
+                >
+                  업로드
+                </CldUploadButton>
+              </div>
+            </div>
           </div>
 
           <div className="sm:col-span-2">

@@ -1,6 +1,7 @@
 "use client";
 import { User } from "@prisma/client";
 import CompanyBox from "./CompanyBox";
+import { FaFireAlt } from "react-icons/fa";
 
 interface CompanyListProps {
   items: User[];
@@ -38,6 +39,10 @@ const CompanyList: React.FC<CompanyListProps> = ({ items }) => {
           </div>
         </div>
         <div className="hidden lg:block">
+          <div className="my-5 flex items-center gap-2">
+            <FaFireAlt size={18} className=" text-red-600" />
+            가장 인기있는 서비스 센터
+          </div>
           {items.map(item => (
             <CompanyBox key={item.id} data={item} />
           ))}

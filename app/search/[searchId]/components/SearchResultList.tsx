@@ -25,40 +25,12 @@ const SearchResultList: React.FC<SearchResultListProps> = ({ data, title }) => {
         2xl:grid-cols-4
     "
       >
-        {/* {data 리스트 들이 들어옴} */}
-        {data.map(item => (
-          <SearchResultBox key={item.id} data={item} />
-        ))}
-        {data.map(item => (
-          <SearchResultBox key={item.id} data={item} />
-        ))}
-        {data.map(item => (
-          <SearchResultBox key={item.id} data={item} />
-        ))}
-        {data.map(item => (
-          <SearchResultBox key={item.id} data={item} />
-        ))}
-        {data.map(item => (
-          <SearchResultBox key={item.id} data={item} />
-        ))}
-        {data.map(item => (
-          <SearchResultBox key={item.id} data={item} />
-        ))}
-        {data.map(item => (
-          <SearchResultBox key={item.id} data={item} />
-        ))}
-        {data.map(item => (
-          <SearchResultBox key={item.id} data={item} />
-        ))}{" "}
-        {data.map(item => (
-          <SearchResultBox key={item.id} data={item} />
-        ))}{" "}
-        {data.map(item => (
-          <SearchResultBox key={item.id} data={item} />
-        ))}{" "}
-        {data.map(item => (
-          <SearchResultBox key={item.id} data={item} />
-        ))}
+        <div className="mt-4">
+          {/* {data 리스트 들이 들어옴} */}
+          {data.map(item => (
+            <SearchResultBox key={item.id} data={item} />
+          ))}
+        </div>
       </div>
     </div>
   );
