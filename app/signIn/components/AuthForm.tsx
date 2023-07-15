@@ -67,7 +67,10 @@ const AuthForm = () => {
             router.push("/users");
           }
         })
-        .finally(() => setIsLoading(false));
+        .finally(() => {
+          reset();
+          setIsLoading(false);
+        });
     }
   };
 
@@ -275,7 +278,13 @@ const AuthForm = () => {
               ? "새 계정이 필요하신가요?"
               : "이미 계정이 있으신가요?"}
           </div>
-          <div onClick={toggleVariant} className="cursor-pointer underline">
+          <div
+            onClick={() => {
+              toggleVariant();
+              reset();
+            }}
+            className="cursor-pointer underline"
+          >
             {variant === "LOGIN" ? "새 계정 만들기" : "로그인 하기"}
           </div>
         </div>

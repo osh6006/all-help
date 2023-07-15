@@ -18,6 +18,8 @@ model User {
   image          String?
   role           String
   company        String?
+  cphone         String?
+  businessHours  String?
   area           String?
   companyImage   String?
   hashedPassword String?
@@ -30,7 +32,7 @@ model User {
   seenMessageIds String[]  @db.ObjectId
   seenMessages   Message[] @relation("Seen", fields: [seenMessageIds], references: [id])
 
-  accounts Account[] 
+  accounts Account[]
   messages Message[]
 }
 
@@ -77,8 +79,8 @@ model Message {
   seenIds String[] @db.ObjectId
   seen    User[]   @relation("Seen", fields: [seenIds], references: [id])
 
-  conversationId String @db.ObjectId
-  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversationId String       @db.ObjectId
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
 
   senderId String @db.ObjectId
   sender   User   @relation(fields: [senderId], references: [id], onDelete: Cascade)

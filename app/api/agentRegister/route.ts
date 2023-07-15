@@ -6,7 +6,16 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { email, name, password, company, companyImage, area } = body;
+    const {
+      email,
+      name,
+      password,
+      company,
+      companyImage,
+      area,
+      cphone,
+      businessHours,
+    } = body;
 
     if (!email || !name || !password || !company || !area) {
       return new NextResponse("Missing Info", { status: 400 });
@@ -15,12 +24,22 @@ export async function POST(request: Request) {
     const hashedPassword = await bcrypt.hash(password, 12);
 
     const user = await prisma.user.create({
-      data: { email, name, hashedPassword, role: "agent", company, companyImage, area },
+      data: {
+        email,
+        name,
+        hashedPassword,
+        role: "agent",
+        company,
+        companyImage,
+        area,
+        cphone,
+        businessHours,
+      },
     });
 
     return NextResponse.json(user);
   } catch (error) {
     console.log(error, "REGISTRATION_ERROR");
-    return new NextResponse("Internal Error", { status: 500 });
+    return new NextResponse("Internal  Error", { status: 500 });
   }
 }

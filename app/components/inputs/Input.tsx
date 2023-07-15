@@ -1,7 +1,6 @@
 "use client";
 
 import clsx from "clsx";
-import { validateOptions } from "pusher-js/types/src/core/options";
 import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
 
 interface InputProps {

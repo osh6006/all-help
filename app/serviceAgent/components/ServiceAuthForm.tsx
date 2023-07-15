@@ -1,10 +1,9 @@
 "use client";
 import axios from "axios";
 import Button from "@/app/components/Button";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import { toast } from "react-hot-toast";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import useIsUser from "@/app/hooks/useIsUser";
 import Input from "@/app/components/inputs/Input";
@@ -12,6 +11,9 @@ import Select from "@/app/components/inputs/Select";
 import { AreaArray, AreaObj } from "@/app/utils/serviceAgent";
 import useTimePicker from "@/app/hooks/useTimePicker";
 import NewTimePicker from "@/app/components/inputs/NewTimePicker";
+import moment from "moment";
+import Image from "next/image";
+import { CldUploadButton } from "next-cloudinary";
 
 const ServiceAuthForm = () => {
   const isUser = useIsUser();
@@ -31,6 +33,8 @@ const ServiceAuthForm = () => {
     handleSubmit,
     formState: { errors },
     reset,
+    watch,
+    setValue,
   } = useForm<FieldValues>({
     defaultValues: {
       name: "",
@@ -42,11 +46,16 @@ const ServiceAuthForm = () => {
     },
   });
 
+  const image = watch("image");
+  const handleUpload = (result: any) => {
+    setValue("image", result?.info?.secure_url, {
+      shouldValidate: true,
+    });
+  };
+
   const onSubmit: SubmitHandler<FieldValues> = data => {
     setIsLoading(true);
     // 서버에 가입 요청
-
-    console.log(compareTimes(firstTime, secondTime));
 
     if (compareTimes(firstTime, secondTime) === 2) {
       const newData = { ...data, businessHours: `${firstTime},${secondTime}` };
@@ -55,7 +64,7 @@ const ServiceAuthForm = () => {
         .then(() => {
           toast.success("가입이 완료되었습니다 로그인을 해주세요");
           reset();
-          router.push("/");
+          router.push("/signIn");
         })
         .catch(() => toast.error("잘못 입력하셨습니다 !"))
         .finally(() => {
@@ -168,7 +177,7 @@ const ServiceAuthForm = () => {
           />
           <div className="sm:col-span-2">
             <Input
-              id="phoneNumber"
+              id="cphone"
               label="회사 번호"
               register={register}
               errors={errors}
@@ -222,15 +231,19 @@ const ServiceAuthForm = () => {
           </div>
 
           <div className="sm:col-span-2">
-            <Input
-              id="companyImage"
-              label="회사 이미지(로고)"
-              type="file"
-              register={register}
-              errors={errors}
-              disabled={isLoading}
-              accept=".jpg, .jpeg, .png"
+            <div className="text-sm">회사 이미지(로고)</div>
+            <Image
+              width="48"
+              height="48"
+              className="mt-2 rounded-full"
+              src={image || "/images/placeholder.jpg"}
+              alt="Avatar"
             />
+            <CldUploadButton
+              options={{ maxFiles: 1 }}
+              onUpload={handleUpload}
+              uploadPreset="m5qf4qmx"
+            ></CldUploadButton>
           </div>
 
           <div className="sm:col-span-2">
@@ -266,29 +279,15 @@ const ServiceAuthForm = () => {
 
 export default ServiceAuthForm;
 
-function compareTimes(time1: string, time2: string): number {
-  const timeFormat = /(\d+):(\d+)\s*(\w+)/;
-  const [, hour1, minute1, meridiem1] = time1.match(timeFormat) || [];
-  const [, hour2, minute2, meridiem2] = time2.match(timeFormat) || [];
+function compareTimes(first: string, second: string): number {
+  const format = "h:mm A";
+  const date1 = moment(first, format);
+  const date2 = moment(second, format);
 
-  if (!hour1 || !minute1 || !meridiem1 || !hour2 || !minute2 || !meridiem2) {
-    return 0;
-  }
-
-  const formattedTime1 = `${
-    parseInt(hour1) + (meridiem1.toLowerCase() === "pm" ? 12 : 0)
-  }:${minute1}`;
-  const formattedTime2 = `${
-    parseInt(hour2) + (meridiem2.toLowerCase() === "pm" ? 12 : 0)
-  }:${minute2}`;
-
-  const date1 = new Date(`2000-01-01T${formattedTime1}`);
-  const date2 = new Date(`2000-01-01T${formattedTime2}`);
-
-  if (date1 > date2) {
-    return 1;
-  } else if (date1 < date2) {
+  if (date1.isBefore(date2)) {
     return 2;
+  } else if (date1.isAfter(date2)) {
+    return 1;
   } else {
     return 0;
   }
