@@ -21,10 +21,10 @@ const useRoute = () => {
         active: pathname === "conversations",
       },
       {
-        label: "Users",
-        href: "/users",
+        label: "Followings",
+        href: "/followings",
         icon: HiUsers,
-        active: pathname === "users",
+        active: pathname === "followings",
       },
       {
         label: "Search",

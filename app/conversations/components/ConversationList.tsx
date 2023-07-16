@@ -110,7 +110,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
         <div className="px-5">
           <div className="mb-4 flex justify-between pt-4">
             <div className="text-2xl font-bold text-neutral-800">Messages</div>
-            <div
+            {/* <div
               onClick={() => setIsModalOpen(true)}
               className="
                 cursor-pointer 
@@ -123,7 +123,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
               "
             >
               <MdOutlineGroupAdd size={20} />
-            </div>
+            </div> */}
           </div>
           {items.map(item => (
             <ConversationBox

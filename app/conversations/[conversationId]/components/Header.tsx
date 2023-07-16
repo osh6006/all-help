@@ -10,6 +10,8 @@ import { FiMoreHorizontal } from "react-icons/fi";
 import ProfileDrawer from "./ProfileDrawer";
 import AvatarGroup from "@/app/components/AvatarGroup";
 import useActiveList from "@/app/hooks/useActiveList";
+import { BsFillPersonPlusFill } from "react-icons/bs";
+import axios from "axios";
 
 interface HeaderProps {
   conversation: Conversation & {
@@ -31,6 +33,12 @@ const Header: React.FC<HeaderProps> = ({ conversation }) => {
 
     return isActive ? "활동중" : "오프라인";
   }, [conversation, isActive]);
+
+  const addFollow = () => {
+    axios.post("/api/follow", {
+      id: conversation.id,
+    });
+  };
 
   return (
     <>
@@ -79,16 +87,38 @@ const Header: React.FC<HeaderProps> = ({ conversation }) => {
             </div>
           </div>
         </div>
-        <FiMoreHorizontal
-          size={32}
-          onClick={() => setDrawerOpen(true)}
-          className="
-        cursor-pointer
-        text-orange-500
-        transition
-        hover:text-orange-600
-       "
-        />
+        <div className="flex items-center gap-7">
+          <div className="group relative flex flex-col items-center justify-center">
+            <BsFillPersonPlusFill
+              size={32}
+              className="
+              cursor-pointer
+              text-orange-500
+              transition
+              hover:text-orange-600
+            "
+            />
+            {/* 툴팁 */}
+            <div className="absolute -bottom-9 mt-2 rounded-md bg-black p-2 text-xs text-white opacity-0 transition group-hover:block group-hover:opacity-90">
+              Follow
+            </div>
+          </div>
+          <div className="group relative flex flex-col items-center justify-center">
+            <FiMoreHorizontal
+              size={32}
+              onClick={() => setDrawerOpen(true)}
+              className="
+                cursor-pointer
+                text-orange-500
+                transition
+                hover:text-orange-600
+              "
+            />
+            <div className="absolute -bottom-9 mt-2 rounded-md bg-black p-2 text-xs text-white opacity-0 transition group-hover:block group-hover:opacity-90">
+              Info
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );
