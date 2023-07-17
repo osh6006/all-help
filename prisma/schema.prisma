@@ -14,18 +14,19 @@ model User {
   id             String    @id @default(auto()) @map("_id") @db.ObjectId
   name           String?
   email          String?   @unique
+  cphone         String?
   emailVerified  DateTime?
   image          String?
   role           String
   company        String?
-  cphone         String?   @unique
   businessHours  String?
   area           String?
   companyImage   String?
   hashedPassword String?
 
-  followers String[]
-  following String[]
+  followers      String[]
+  following      String[]
+  followersCount Int      @default(0)
 
   createdAt  DateTime @default(now())
   updeatedAt DateTime @updatedAt

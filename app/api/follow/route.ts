@@ -42,7 +42,7 @@ export async function POST(request: Request) {
 
       await prisma.user.update({
         where: { id: followUser.id },
-        data: { followers: updateFollow },
+        data: { followers: updateFollow, followersCount: updateFollow.length },
       });
 
       return NextResponse.json(false);
@@ -52,13 +52,16 @@ export async function POST(request: Request) {
       const updatedFollowing = [...currentUser.following, followUser.id];
 
       await prisma.user.update({
-        where: { id: followUser.id },
-        data: { followers: updatedFollowers },
+        where: { id: currentUser.id },
+        data: { following: updatedFollowing },
       });
 
       await prisma.user.update({
-        where: { id: currentUser.id },
-        data: { following: updatedFollowing },
+        where: { id: followUser.id },
+        data: {
+          followers: updatedFollowers,
+          followersCount: updatedFollowers.length,
+        },
       });
 
       return NextResponse.json(true);

@@ -5,9 +5,6 @@ import Header from "./components/Header";
 import Body from "./components/Body";
 import Form from "./components/Form";
 import getCurrentUser from "@/app/actions/getCurrentUser";
-import getFollowings from "@/app/actions/getFollowings";
-import getIsFollow from "@/app/actions/getIsFollow";
-import useOtherUser from "@/app/hooks/userOtherUser";
 
 interface Iparams {
   conversationId: string;

@@ -41,7 +41,7 @@ const CompanyList: React.FC<CompanyListProps> = ({ items }) => {
         <div className="hidden lg:block">
           <div className="my-5 flex items-center gap-2">
             <FaFireAlt size={18} className=" text-red-600" />
-            가장 인기있는 서비스 센터
+            가장 인기있는 서비스 센터 Top 10
           </div>
           {items.map(item => (
             <CompanyBox key={item.id} data={item} />
