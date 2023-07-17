@@ -92,8 +92,8 @@ model Message {
 model Follow {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  follower    User     @relation("FollowersRelation", fields: [followerId], references: [id])
-  followerId  String[] @db.ObjectId
-  following   User     @relation("FollowingRelation", fields: [followingId], references: [id])
-  followingId String[] @db.ObjectId
+  follower    User   @relation("FollowersRelation", fields: [followerId], references: [id])
+  followerId  String @db.ObjectId
+  following   User   @relation("FollowingRelation", fields: [followingId], references: [id])
+  followingId String @db.ObjectId
 }

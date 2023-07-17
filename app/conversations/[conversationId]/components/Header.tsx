@@ -4,7 +4,7 @@ import Avatar from "@/app/components/Avatar";
 import useOtherUser from "@/app/hooks/userOtherUser";
 import { Conversation, User } from "@prisma/client";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { HiChevronLeft } from "react-icons/hi";
 import { FiMoreHorizontal } from "react-icons/fi";
 import ProfileDrawer from "./ProfileDrawer";
@@ -12,15 +12,21 @@ import AvatarGroup from "@/app/components/AvatarGroup";
 import useActiveList from "@/app/hooks/useActiveList";
 import { BsFillPersonPlusFill } from "react-icons/bs";
 import axios from "axios";
+import { toast } from "react-hot-toast";
+import { useSession } from "next-auth/react";
+import { pusherClient } from "@/app/libs/pusher";
+import clsx from "clsx";
 
 interface HeaderProps {
   conversation: Conversation & {
     users: User[];
   };
+  currentUser?: User;
 }
 
-const Header: React.FC<HeaderProps> = ({ conversation }) => {
+const Header: React.FC<HeaderProps> = ({ conversation, currentUser }) => {
   const otherUser = useOtherUser(conversation);
+  const session = useSession();
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { members } = useActiveList();
@@ -34,10 +40,47 @@ const Header: React.FC<HeaderProps> = ({ conversation }) => {
     return isActive ? "활동중" : "오프라인";
   }, [conversation, isActive]);
 
-  const addFollow = () => {
-    axios.post("/api/follow", {
-      id: conversation.id,
+  const pusherKey = useMemo(() => {
+    return session.data?.user?.id;
+  }, [session.data?.user?.id]);
+
+  const [isFollow, setIsFollow] = useState(false);
+
+  // 팔로우 상태를 가져오는 API 호출
+  const fetchFollowStatus = useCallback(async () => {
+    // API 호출을 통해 현재 팔로우 상태를 가져온다.
+    const response = await axios.post(`/api/isFollow`, {
+      userId: currentUser?.id,
+      otherUserId: otherUser.id,
     });
+    setIsFollow(response.data);
+  }, [currentUser?.id, otherUser?.id]);
+
+  useEffect(() => {
+    fetchFollowStatus();
+  }, [fetchFollowStatus]);
+
+  const toggleFollow = () => {
+    axios
+      .post("/api/follow", {
+        userId: currentUser?.id,
+        otherUserId: otherUser.id,
+      })
+      .then(data => {
+        if (data.data === 2) {
+          toast.success(
+            `${conversation.users[0].company} 님을 팔로우 하였습니다`
+          );
+          setIsFollow(true);
+        } else {
+          toast.success(
+            `${conversation.users[0].company} 님의 팔로우를 취소 하였습니다`
+          );
+          setIsFollow(false);
+        }
+      })
+      .catch(() => toast.error("서버 오류가 발생하였습니다"))
+      .finally();
   };
 
   return (
@@ -87,20 +130,24 @@ const Header: React.FC<HeaderProps> = ({ conversation }) => {
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-7">
+        <div className="flex items-center gap-5 lg:gap-7">
           <div className="group relative flex flex-col items-center justify-center">
             <BsFillPersonPlusFill
-              size={32}
-              className="
+              size={30}
+              className={clsx(
+                `
               cursor-pointer
-              text-orange-500
               transition
-              hover:text-orange-600
-            "
+              
+              `,
+                isFollow && "text-gray-400 hover:text-orange-500",
+                !isFollow && " text-orange-500 hover:text-gray-500"
+              )}
+              onClick={() => toggleFollow()}
             />
             {/* 툴팁 */}
             <div className="absolute -bottom-9 mt-2 rounded-md bg-black p-2 text-xs text-white opacity-0 transition group-hover:block group-hover:opacity-90">
-              Follow
+              {(isFollow && "Unfollow") || "Follow"}
             </div>
           </div>
           <div className="group relative flex flex-col items-center justify-center">
