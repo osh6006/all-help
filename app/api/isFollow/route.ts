@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     });
 
     if (!user) {
-      return new NextResponse("계정에 가 있습니다.", { status: 400 });
+      return new NextResponse("계정에 문제가 있습니다.", { status: 400 });
     }
 
     let isFollow: boolean = false;

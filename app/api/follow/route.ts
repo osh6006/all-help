@@ -27,7 +27,6 @@ export async function POST(request: Request) {
 
     if (isFollow) {
       // 언 팔로우
-
       const updatedFollowing: string[] = currentUser.following.filter(
         item => item !== followUser.id
       );
@@ -38,13 +37,14 @@ export async function POST(request: Request) {
 
       await prisma.user.update({
         where: { id: currentUser.id },
-        data: { followers: updatedFollowing },
+        data: { following: updatedFollowing },
       });
 
       await prisma.user.update({
         where: { id: followUser.id },
-        data: { following: updateFollow },
+        data: { followers: updateFollow },
       });
+
       return NextResponse.json(false);
     } else {
       // 팔로우

@@ -40,6 +40,11 @@ const UserList: React.FC<UserListProps> = ({ items }) => {
             Followings
           </div>
         </div>
+        {items.length === 0 && (
+          <div className="absolute inset-0 flex items-center justify-center text-center text-gray-500 ">
+            아직 팔로우한 센터가 없습니다! <br />
+          </div>
+        )}
         {items.map(item => (
           <CompanyBox data={item} key={item.id} />
         ))}

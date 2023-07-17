@@ -25,7 +25,7 @@ const EmptyState = ({
           mt-2
           font-mono
           text-2xl
-          text-gray-900
+          text-gray-500
         "
         >
           {title}
