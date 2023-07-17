@@ -16,25 +16,16 @@ export async function POST(request: Request) {
       where: { id: userId },
     });
 
-    const followingUser = await prisma.user.findUnique({
-      where: { id: otherUserId },
-    });
-
-    if (!followingUser || !user) {
-      return new NextResponse("아이디 오류가 있습니다.", { status: 400 });
+    if (!user) {
+      return new NextResponse("계정에 가 있습니다.", { status: 400 });
     }
 
-    const isFollow = await prisma.follow.findFirst({
-      where: {
-        followerId: userId,
-        followingId: otherUserId,
-      },
+    let isFollow: boolean = false;
+    user.following.forEach(item => {
+      if (item === otherUserId) isFollow = true;
     });
 
-    if (isFollow) {
-      return NextResponse.json(true);
-    }
-    return NextResponse.json(false);
+    return NextResponse.json(isFollow);
   } catch (error) {
     console.log(error, "ISFOLLOW_ERROR");
     return new NextResponse("Internal Error", { status: 500 });

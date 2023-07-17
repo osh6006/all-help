@@ -10,12 +10,11 @@ import { FiMoreHorizontal } from "react-icons/fi";
 import ProfileDrawer from "./ProfileDrawer";
 import AvatarGroup from "@/app/components/AvatarGroup";
 import useActiveList from "@/app/hooks/useActiveList";
-import { BsFillPersonPlusFill } from "react-icons/bs";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useSession } from "next-auth/react";
-import { pusherClient } from "@/app/libs/pusher";
 import clsx from "clsx";
+import { RiUserFollowFill, RiUserUnfollowFill } from "react-icons/ri";
 
 interface HeaderProps {
   conversation: Conversation & {
@@ -67,15 +66,11 @@ const Header: React.FC<HeaderProps> = ({ conversation, currentUser }) => {
         otherUserId: otherUser.id,
       })
       .then(data => {
-        if (data.data === 2) {
-          toast.success(
-            `${conversation.users[0].company} 님을 팔로우 하였습니다`
-          );
+        if (data.data === true) {
+          toast.success(`${otherUser.company} 님을 팔로우 하였습니다`);
           setIsFollow(true);
         } else {
-          toast.success(
-            `${conversation.users[0].company} 님의 팔로우를 취소 하였습니다`
-          );
+          toast.success(`${otherUser.company} 님의 팔로우를 취소 하였습니다`);
           setIsFollow(false);
         }
       })
@@ -124,7 +119,7 @@ const Header: React.FC<HeaderProps> = ({ conversation, currentUser }) => {
             <Avatar user={otherUser} />
           )}
           <div className="flex flex-col">
-            <div>{conversation.name || otherUser.name}</div>
+            <div>{conversation.name || otherUser.company}</div>
             <div className=" text-sm font-light text-neutral-500">
               {statusText}
             </div>
@@ -132,19 +127,36 @@ const Header: React.FC<HeaderProps> = ({ conversation, currentUser }) => {
         </div>
         <div className="flex items-center gap-5 lg:gap-7">
           <div className="group relative flex flex-col items-center justify-center">
-            <BsFillPersonPlusFill
-              size={30}
-              className={clsx(
-                `
+            {isFollow && (
+              <RiUserUnfollowFill
+                size={30}
+                className={clsx(
+                  `
               cursor-pointer
               transition
               
               `,
-                isFollow && "text-gray-400 hover:text-orange-500",
-                !isFollow && " text-orange-500 hover:text-gray-500"
-              )}
-              onClick={() => toggleFollow()}
-            />
+                  isFollow && "text-gray-400 hover:text-orange-500",
+                  !isFollow && " text-orange-500 hover:text-gray-500"
+                )}
+                onClick={() => toggleFollow()}
+              />
+            )}
+            {!isFollow && (
+              <RiUserFollowFill
+                size={30}
+                className={clsx(
+                  `
+              cursor-pointer
+              transition
+              
+              `,
+                  isFollow && "text-gray-400 hover:text-orange-500",
+                  !isFollow && " text-orange-500 hover:text-gray-500"
+                )}
+                onClick={() => toggleFollow()}
+              />
+            )}
             {/* 툴팁 */}
             <div className="absolute -bottom-9 mt-2 rounded-md bg-black p-2 text-xs text-white opacity-0 transition group-hover:block group-hover:opacity-90">
               {(isFollow && "Unfollow") || "Follow"}

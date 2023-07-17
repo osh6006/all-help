@@ -64,7 +64,7 @@ const AuthForm = () => {
 
           if (callback?.ok && !callback.error) {
             toast.success("로그인에 성공하셨습니다 !");
-            router.push("/users");
+            router.push("/");
           }
         })
         .finally(() => {

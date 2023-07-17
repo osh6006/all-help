@@ -7,7 +7,7 @@ const useIsUser = () => {
   const router = useRouter();
   useEffect(() => {
     if (session.status === "authenticated") {
-      router.push("/users");
+      router.push("/");
     }
   }, [session?.status, router]);
 };

@@ -18,13 +18,17 @@ model User {
   image          String?
   role           String
   company        String?
-  cphone         String?
+  cphone         String?   @unique
   businessHours  String?
   area           String?
   companyImage   String?
   hashedPassword String?
-  createdAt      DateTime  @default(now())
-  updeatedAt     DateTime  @updatedAt
+
+  followers String[]
+  following String[]
+
+  createdAt  DateTime @default(now())
+  updeatedAt DateTime @updatedAt
 
   conversationIds String[]       @db.ObjectId
   conversations   Conversation[] @relation(fields: [conversationIds], references: [id])
@@ -34,9 +38,6 @@ model User {
 
   accounts Account[]
   messages Message[]
-
-  followers Follow[] @relation("FollowersRelation")
-  following Follow[] @relation("FollowingRelation")
 }
 
 model Account {
@@ -87,13 +88,4 @@ model Message {
 
   senderId String @db.ObjectId
   sender   User   @relation(fields: [senderId], references: [id], onDelete: Cascade)
-}
-
-model Follow {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-
-  follower    User   @relation("FollowersRelation", fields: [followerId], references: [id])
-  followerId  String @db.ObjectId
-  following   User   @relation("FollowingRelation", fields: [followingId], references: [id])
-  followingId String @db.ObjectId
 }

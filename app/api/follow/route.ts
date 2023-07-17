@@ -1,57 +1,70 @@
 import prisma from "@/app/libs/prismadb";
 import { NextResponse } from "next/server";
-import { pusherServer } from "@/app/libs/pusher";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { userId, otherUserId } = body;
 
-    if (!userId && !otherUserId) {
-      return new NextResponse("Missing Info UserId & otherUserId", {
+    // 현재 사용자와 팔로워할 사용자 가져오기
+    const currentUser = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+    const followUser = await prisma.user.findUnique({
+      where: { id: otherUserId },
+    });
+
+    if (!currentUser || !followUser) {
+      return new NextResponse("Missing Info currentUser & followUser", {
         status: 400,
       });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-    });
-
-    const followingUser = await prisma.user.findUnique({
-      where: { id: otherUserId },
-    });
-
-    if (!followingUser || !user) {
-      return new NextResponse("아이디 오류가 있습니다.", { status: 400 });
-    }
-
-    const isFollow = await prisma.follow.findFirst({
-      where: {
-        followerId: userId,
-        followingId: otherUserId,
-      },
+    let isFollow = false;
+    currentUser.following.forEach(item => {
+      if (item === followUser.id) isFollow = true;
     });
 
     if (isFollow) {
-      await prisma.follow.delete({
-        where: { id: isFollow.id },
+      // 언 팔로우
+
+      const updatedFollowing: string[] = currentUser.following.filter(
+        item => item !== followUser.id
+      );
+
+      const updateFollow: string[] = followUser.followers.filter(
+        item => item !== currentUser.id
+      );
+
+      await prisma.user.update({
+        where: { id: currentUser.id },
+        data: { followers: updatedFollowing },
       });
-      pusherServer.trigger(userId, "follow:toggle", isFollow);
 
-      return NextResponse.json(1);
+      await prisma.user.update({
+        where: { id: followUser.id },
+        data: { following: updateFollow },
+      });
+      return NextResponse.json(false);
+    } else {
+      // 팔로우
+      const updatedFollowers = [...followUser.followers, currentUser.id];
+      const updatedFollowing = [...currentUser.following, followUser.id];
+
+      await prisma.user.update({
+        where: { id: followUser.id },
+        data: { followers: updatedFollowers },
+      });
+
+      await prisma.user.update({
+        where: { id: currentUser.id },
+        data: { following: updatedFollowing },
+      });
+
+      return NextResponse.json(true);
     }
-
-    const follow = await prisma.follow.create({
-      data: {
-        follower: { connect: { id: userId } },
-        following: { connect: { id: otherUserId } },
-      },
-    });
-
-    pusherServer.trigger(userId, "follow:toggle", follow);
-    return NextResponse.json(2);
   } catch (error) {
-    console.log(error, "TOGGLEFOLLOW_ERROR");
+    console.log(error, "TOGGLE_FOLLOW_ERROR");
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
