@@ -12,6 +12,8 @@ import Avatar from "@/app/components/Avatar";
 import ConfirmModal from "./ConfirmModal";
 import AvatarGroup from "@/app/components/AvatarGroup";
 import useActiveList from "@/app/hooks/useActiveList";
+import { FiMail } from "react-icons/fi";
+import { BiSolidPhone, BiTime } from "react-icons/bi";
 
 interface ProfileDrawerProps {
   isOpen: boolean;
@@ -150,29 +152,94 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                                 </div>
                               )}
                               {!data.isGroup && (
-                                <div>
-                                  <dt
-                                    className="
+                                <>
+                                  <div>
+                                    <dt
+                                      className="
+                                  flex
+                                  items-center
+                                  gap-2
                                   text-sm 
                                   font-medium 
                                   text-gray-500 
                                   sm:w-40 
                                   sm:flex-shrink-0
                                 "
-                                  >
-                                    Email
-                                  </dt>
-                                  <dd
-                                    className="
+                                    >
+                                      <FiMail className="text-base text-orange-500" />
+                                      이메일
+                                    </dt>
+                                    <dd
+                                      className="
                                   mt-1 
                                   text-sm 
                                   text-gray-900 
                                   sm:col-span-2
                                 "
-                                  >
-                                    {otherUser.email}
-                                  </dd>
-                                </div>
+                                    >
+                                      {otherUser.email}
+                                    </dd>
+                                  </div>
+                                </>
+                              )}
+
+                              {!data.isGroup && otherUser.role === "agent" && (
+                                <>
+                                  <div>
+                                    <dt
+                                      className="
+                                      flex
+                                      items-center
+                                      gap-2
+                                      text-sm 
+                                      font-medium 
+                                      text-gray-500 
+                                      sm:w-40 
+                                      sm:flex-shrink-0
+                                      "
+                                    >
+                                      <BiSolidPhone className="text-base text-green-500" />
+                                      전화번호
+                                    </dt>
+                                    <dd
+                                      className="
+                                      mt-1 
+                                      text-sm 
+                                      text-gray-900 
+                                      sm:col-span-2
+                                      "
+                                    >
+                                      {otherUser.cphone}
+                                    </dd>
+                                  </div>
+                                  <div>
+                                    <dt
+                                      className="
+                                      flex
+                                      items-center
+                                      gap-2
+                                      text-sm 
+                                      font-medium 
+                                      text-gray-500 
+                                      sm:w-40 
+                                      sm:flex-shrink-0
+                                      "
+                                    >
+                                      <BiTime className="text-base text-rose-500" />
+                                      상담 시간
+                                    </dt>
+                                    <dd
+                                      className="
+                                      mt-1 
+                                      text-sm 
+                                      text-gray-900 
+                                      sm:col-span-2
+                                      "
+                                    >
+                                      {otherUser.businessHours}
+                                    </dd>
+                                  </div>
+                                </>
                               )}
                               {!data.isGroup && (
                                 <>
@@ -187,7 +254,7 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                                     sm:flex-shrink-0
                                   "
                                     >
-                                      Joined
+                                      참여일
                                     </dt>
                                     <dd
                                       className="
