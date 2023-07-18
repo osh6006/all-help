@@ -8,6 +8,7 @@ interface NewTimePickerProps {
   setSecondTime: (value: string) => void;
   error: boolean;
   disable: boolean;
+  defaultValue?: string;
 }
 
 const NewTimePicker: React.FC<NewTimePickerProps> = ({
@@ -16,6 +17,7 @@ const NewTimePicker: React.FC<NewTimePickerProps> = ({
   title,
   error,
   disable,
+  defaultValue,
 }) => {
   const minuteStep = 30;
   return (

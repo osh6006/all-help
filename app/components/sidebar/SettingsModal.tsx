@@ -3,7 +3,7 @@
 import { User } from "@prisma/client";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   FieldValue,
   FieldValues,
@@ -19,6 +19,7 @@ import Button from "../Button";
 import { signOut } from "next-auth/react";
 import Select from "../inputs/Select";
 import { AreaArray } from "@/app/utils/serviceAgent";
+import useTimePicker from "@/app/hooks/useTimePicker";
 
 interface SettingsModalProps {
   isOpen?: boolean;
@@ -49,6 +50,17 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
       area: currentUser?.area,
     },
   });
+
+  const {
+    firstTime,
+    secondTime,
+    setFirstTime,
+    setSecondTime,
+    setTimeError,
+    timeError,
+  } = useTimePicker();
+
+  useEffect(() => {}, []);
 
   const image = watch("image");
   const handleUpload = (result: any) => {
@@ -256,12 +268,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
           </div>
         </div>
       </form>
-      <Button
-        disabled={isLoading}
-        onClick={() => {
-          handleClose();
-        }}
-      >
+      <Button disabled={isLoading} onClick={() => signOut()}>
         로그아웃
       </Button>
     </Modal>
