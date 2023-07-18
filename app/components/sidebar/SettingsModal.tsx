@@ -17,6 +17,8 @@ import Image from "next/image";
 import { CldUploadButton } from "next-cloudinary";
 import Button from "../Button";
 import { signOut } from "next-auth/react";
+import Select from "../inputs/Select";
+import { AreaArray } from "@/app/utils/serviceAgent";
 
 interface SettingsModalProps {
   isOpen?: boolean;
@@ -36,11 +38,15 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
     handleSubmit,
     setValue,
     watch,
+    reset,
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {
       name: currentUser?.name,
+      company: currentUser?.company,
       image: currentUser?.image,
+      cphone: currentUser?.cphone,
+      area: currentUser?.area,
     },
   });
 
@@ -57,14 +63,36 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
       .post("/api/settings", data)
       .then(() => {
         router.refresh();
+        handleReset();
         onClose();
       })
-      .catch(() => toast.error("오류가 발생했습니다 !"))
+      .catch(error => toast.error(`${error}`))
       .finally(() => setIsLoading(false));
   };
 
+  const handleClose = () => {
+    onClose();
+    handleClose();
+  };
+
+  const handleReset = () => {
+    reset({
+      name: currentUser?.name,
+      company: currentUser?.company,
+      image: currentUser?.image,
+      cphone: currentUser?.cphone,
+      area: currentUser?.area,
+    });
+  };
+
   return (
-    <Modal onClose={onClose} isOpen={isOpen}>
+    <Modal
+      onClose={() => {
+        handleReset();
+        onClose();
+      }}
+      isOpen={isOpen}
+    >
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="
@@ -84,7 +112,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
               mt-10
               flex
               flex-col
-              gap-y-8
+              gap-y-4
             "
             >
               <Input
@@ -94,7 +122,72 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
                 required
                 register={register}
                 disabled={isLoading}
+                validation={{
+                  required: "이름을 입력해주세요.",
+                  minLength: {
+                    value: 2,
+                    message: "이름은 2글자 이상이어야 합니다.",
+                  },
+                  pattern: {
+                    value: /^[가-힣]+$/,
+                    message: "한글만 입력 가능합니다.",
+                  },
+                }}
               />
+              {currentUser?.role === "agent" && (
+                <>
+                  <Input
+                    id="company"
+                    label="회사 이름"
+                    register={register}
+                    errors={errors}
+                    disabled={isLoading}
+                    required
+                    validation={{
+                      required: "회사 이름을 입력해주세요.",
+                    }}
+                  />
+                  <Input
+                    id="cphone"
+                    label="회사 전화번호"
+                    errors={errors}
+                    required
+                    register={register}
+                    disabled={isLoading}
+                    validation={{
+                      required: "회사 번호를 입력해주세요.",
+                      pattern: {
+                        value:
+                          /^0(1[0]|2|3[1-3]|4[1-4]|5[1-5]|6[1-4])-?([0-9]{3,4})-?([0-9]{4})$/,
+                        message: "유효한 전화번호를 입력해주세요.",
+                      },
+                    }}
+                  />
+                  <Select
+                    id="area"
+                    label="지역"
+                    register={register}
+                    errors={errors}
+                    disabled={isLoading}
+                    required
+                    validation={{
+                      required: "지역을 선택해 주세요.",
+                    }}
+                    option={AreaArray.sort((a, b) => {
+                      const nameA = a.name.toUpperCase();
+                      const nameB = b.name.toUpperCase();
+
+                      if (nameA < nameB) {
+                        return -1;
+                      }
+                      if (nameA > nameB) {
+                        return 1;
+                      }
+                      return 0;
+                    })}
+                  />
+                </>
+              )}
               <div>
                 <label
                   className="
@@ -130,7 +223,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
                     uploadPreset="m5qf4qmx"
                   >
                     <Button disabled={isLoading} secondary type="button">
-                      바꾸기
+                      수정하기
                     </Button>
                   </CldUploadButton>
                 </div>
@@ -147,7 +240,14 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
             gap-x-6
           "
           >
-            <Button disabled={isLoading} secondary onClick={onClose}>
+            <Button
+              disabled={isLoading}
+              secondary
+              onClick={() => {
+                handleReset();
+                onClose();
+              }}
+            >
               취소
             </Button>
             <Button disabled={isLoading} type="submit">
@@ -159,8 +259,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
       <Button
         disabled={isLoading}
         onClick={() => {
-          signOut();
-          onClose();
+          handleClose();
         }}
       >
         로그아웃
