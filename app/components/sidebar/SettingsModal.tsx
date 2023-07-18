@@ -62,13 +62,13 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
   } = useTimePicker();
 
   useEffect(() => {
-    setFirstTime(currentUser.businessHours?.split("~")[0].trim());
-    setSecondTime(currentUser.businessHours?.split("~")[1].trim());
+    setFirstTime(currentUser?.businessHours?.split("~")[0].trim());
+    setSecondTime(currentUser?.businessHours?.split("~")[1].trim());
   }, [currentUser?.businessHours, setSecondTime, setFirstTime]);
 
   const handleTimeReset = () => {
-    setFirstTime(currentUser.businessHours?.split("~")[0].trim());
-    setSecondTime(currentUser.businessHours?.split("~")[1].trim());
+    setFirstTime(currentUser?.businessHours?.split("~")[0].trim());
+    setSecondTime(currentUser?.businessHours?.split("~")[1].trim());
     setTimeError(false);
   };
 
