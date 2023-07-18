@@ -1,8 +1,8 @@
 "use client";
 
 import Button from "@/app/components/Button";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
+import "./homebody.css";
 
 interface BodyProps {
   children: React.ReactNode;
@@ -54,9 +54,9 @@ const Body = () => {
         </div>
         <div
           className="
+          main-bg 
           h-[450px] 
           w-3/4 
-          bg-main-bg 
           bg-contain 
           bg-center 
           bg-no-repeat 
