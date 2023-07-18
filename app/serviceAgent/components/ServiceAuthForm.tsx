@@ -1,19 +1,22 @@
 "use client";
 import axios from "axios";
 import Button from "@/app/components/Button";
-import { useState } from "react";
-import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
-import { toast } from "react-hot-toast";
-import { useRouter } from "next/navigation";
-import useIsUser from "@/app/hooks/useIsUser";
-import Input from "@/app/components/inputs/Input";
-import Select from "@/app/components/inputs/Select";
-import { AreaArray, AreaObj } from "@/app/utils/serviceAgent";
-import useTimePicker from "@/app/hooks/useTimePicker";
-import NewTimePicker from "@/app/components/inputs/NewTimePicker";
-import moment from "moment";
 import Image from "next/image";
 import { CldUploadButton } from "next-cloudinary";
+
+import { useState } from "react";
+import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import useIsUser from "@/app/hooks/useIsUser";
+import useTimePicker from "@/app/hooks/useTimePicker";
+
+import { toast } from "react-hot-toast";
+
+import Input from "@/app/components/inputs/Input";
+import Select from "@/app/components/inputs/Select";
+import NewTimePicker from "@/app/components/inputs/NewTimePicker";
+
+import { AreaArray, compareTimes } from "@/app/utils/serviceAgent";
 
 const ServiceAuthForm = () => {
   const isUser = useIsUser();
@@ -298,17 +301,3 @@ const ServiceAuthForm = () => {
 };
 
 export default ServiceAuthForm;
-
-function compareTimes(first: string, second: string): number {
-  const format = "h:mm A";
-  const date1 = moment(first, format);
-  const date2 = moment(second, format);
-
-  if (date1.isBefore(date2)) {
-    return 2;
-  } else if (date1.isAfter(date2)) {
-    return 1;
-  } else {
-    return 0;
-  }
-}

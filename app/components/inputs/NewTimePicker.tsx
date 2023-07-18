@@ -1,6 +1,8 @@
 import clsx from "clsx";
 import TimePicker from "rc-time-picker";
 import "./timepicker.css";
+import { Time } from "@/app/utils/serviceAgent";
+import moment from "moment";
 
 interface NewTimePickerProps {
   title?: string;
@@ -9,6 +11,8 @@ interface NewTimePickerProps {
   error: boolean;
   disable: boolean;
   defaultValue?: string;
+  firstTime?: Time;
+  secondTime?: Time;
 }
 
 const NewTimePicker: React.FC<NewTimePickerProps> = ({
@@ -18,8 +22,13 @@ const NewTimePicker: React.FC<NewTimePickerProps> = ({
   error,
   disable,
   defaultValue,
+  firstTime,
+  secondTime,
 }) => {
   const minuteStep = 30;
+  const defaultFirstTime = moment(firstTime, "h:mm A");
+  const defaultSecondTime = moment(secondTime, "h:mm A");
+
   return (
     <div>
       <div className="text-sm">{title}</div>
@@ -34,6 +43,7 @@ const NewTimePicker: React.FC<NewTimePickerProps> = ({
           minuteStep={minuteStep}
           showSecond={false}
           use12Hours
+          defaultValue={defaultFirstTime}
           onChange={e => {
             if (e) {
               setFirstTime(e.format("LT"));
@@ -47,6 +57,7 @@ const NewTimePicker: React.FC<NewTimePickerProps> = ({
           disabled={disable}
           minuteStep={minuteStep}
           showSecond={false}
+          defaultValue={defaultSecondTime}
           use12Hours
           onChange={e => {
             if (e) {

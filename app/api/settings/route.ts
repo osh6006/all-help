@@ -6,7 +6,7 @@ export async function POST(request: Request) {
   try {
     const currentUser = await getCurrentUser();
     const body = await request.json();
-    const { name, image, company, cphone, area } = body;
+    const { name, image, company, cphone, area, businessHours } = body;
 
     if (!currentUser?.id) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -22,6 +22,7 @@ export async function POST(request: Request) {
         company,
         cphone,
         area,
+        businessHours,
       },
     });
 

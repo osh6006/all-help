@@ -3,7 +3,7 @@
 import { User } from "@prisma/client";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   FieldValue,
   FieldValues,
@@ -18,8 +18,9 @@ import { CldUploadButton } from "next-cloudinary";
 import Button from "../Button";
 import { signOut } from "next-auth/react";
 import Select from "../inputs/Select";
-import { AreaArray } from "@/app/utils/serviceAgent";
+import { AreaArray, compareTimes } from "@/app/utils/serviceAgent";
 import useTimePicker from "@/app/hooks/useTimePicker";
+import NewTimePicker from "../inputs/NewTimePicker";
 
 interface SettingsModalProps {
   isOpen?: boolean;
@@ -60,7 +61,16 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
     timeError,
   } = useTimePicker();
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    setFirstTime(currentUser.businessHours?.split("~")[0].trim());
+    setSecondTime(currentUser.businessHours?.split("~")[1].trim());
+  }, [currentUser?.businessHours, setSecondTime, setFirstTime]);
+
+  const handleTimeReset = () => {
+    setFirstTime(currentUser.businessHours?.split("~")[0].trim());
+    setSecondTime(currentUser.businessHours?.split("~")[1].trim());
+    setTimeError(false);
+  };
 
   const image = watch("image");
   const handleUpload = (result: any) => {
@@ -71,20 +81,28 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
 
   const onSubmit: SubmitHandler<FieldValues> = data => {
     setIsLoading(true);
-    axios
-      .post("/api/settings", data)
-      .then(() => {
-        router.refresh();
-        handleReset();
-        onClose();
-      })
-      .catch(error => toast.error(`${error}`))
-      .finally(() => setIsLoading(false));
-  };
-
-  const handleClose = () => {
-    onClose();
-    handleClose();
+    if (compareTimes(firstTime, secondTime) === 2) {
+      const newData = {
+        ...data,
+        businessHours: `${firstTime} ~ ${secondTime}`,
+      };
+      axios
+        .post("/api/settings", newData)
+        .then(() => {
+          router.refresh();
+          handleReset();
+          handleTimeReset();
+          onClose();
+        })
+        .catch(error => toast.error(`${error}`))
+        .finally(() => {
+          setIsLoading(false);
+          setTimeError(false);
+        });
+    } else {
+      setTimeError(true);
+    }
+    setIsLoading(false);
   };
 
   const handleReset = () => {
@@ -101,6 +119,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
     <Modal
       onClose={() => {
         handleReset();
+        handleTimeReset();
         onClose();
       }}
       isOpen={isOpen}
@@ -198,6 +217,15 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
                       return 0;
                     })}
                   />
+                  <NewTimePicker
+                    setFirstTime={setFirstTime}
+                    setSecondTime={setSecondTime}
+                    error={timeError}
+                    disable={isLoading}
+                    title="근무 시간"
+                    firstTime={firstTime}
+                    secondTime={secondTime}
+                  />
                 </>
               )}
               <div>
@@ -257,6 +285,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
               secondary
               onClick={() => {
                 handleReset();
+                handleTimeReset();
                 onClose();
               }}
             >

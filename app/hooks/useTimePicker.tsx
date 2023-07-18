@@ -1,9 +1,9 @@
 import { useState } from "react";
-import moment from "moment";
+import { Time } from "../utils/serviceAgent";
 
 const useTimePicker = () => {
-  const [firstTime, setFirstTime] = useState("");
-  const [secondTime, setSecondTime] = useState("");
+  const [firstTime, setFirstTime] = useState<Time>("");
+  const [secondTime, setSecondTime] = useState<Time>("");
   const [timeError, setTimeError] = useState(false);
 
   return {

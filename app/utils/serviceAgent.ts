@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export interface AreaObj {
   name: string;
   value: string;
@@ -65,3 +67,23 @@ export const AreaArray: AreaObj[] = [
     value: "부산 광역시",
   },
 ];
+
+export type Time = string | null | undefined;
+
+export function compareTimes(first: Time, second: Time): number {
+  if (!first || !second) {
+    return 0;
+  }
+
+  const format = "h:mm A";
+  const date1 = moment(first, format);
+  const date2 = moment(second, format);
+
+  if (date1.isBefore(date2)) {
+    return 2;
+  } else if (date1.isAfter(date2)) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
