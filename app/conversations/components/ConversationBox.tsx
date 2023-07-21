@@ -96,7 +96,11 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
           <span className="absolute inset-0" aria-hidden="true" />
           <div className="mb-1 flex items-center justify-between">
             <p className="text-md font-medium text-gray-900">
-              {data.name || otherUser.company}
+              <strong className="">
+                {(data.users[0].role === "agent" && otherUser.company) ||
+                  otherUser.name}
+              </strong>
+              <span>님</span>
             </p>
             {lastMessage?.createdAt && (
               <p

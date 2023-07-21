@@ -119,7 +119,14 @@ const Header: React.FC<HeaderProps> = ({ conversation, currentUser }) => {
             <Avatar user={otherUser} />
           )}
           <div className="flex flex-col">
-            <div>{conversation.name || otherUser.company}</div>
+            <div>
+              <strong>
+                {currentUser?.role === "normal"
+                  ? otherUser.company
+                  : otherUser.name}
+              </strong>
+              <span>님</span>
+            </div>
             <div className=" text-sm font-light text-neutral-500">
               {statusText}
             </div>
