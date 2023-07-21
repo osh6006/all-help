@@ -3,10 +3,15 @@
 import useConversation from "@/app/hooks/useConversation";
 import useRoute from "@/app/hooks/useRoute";
 import MobileItem from "./MobileItem";
+import { User } from "@prisma/client";
 
-const MobileFooter = () => {
-  const routes = useRoute();
+interface MobileFooterProps {
+  currentUser: User;
+}
+
+const MobileFooter: React.FC<MobileFooterProps> = ({ currentUser }) => {
   const { isOpen } = useConversation();
+  const { agentRoutes, normalRoutes } = useRoute();
 
   if (isOpen) {
     return null;
@@ -27,18 +32,29 @@ const MobileFooter = () => {
         lg:hidden
     "
     >
-      {routes.map(route => (
-        <MobileItem
-          key={route.href}
-          label={route.label}
-          href={route.href}
-          active={route.active}
-          icon={route.icon}
-
-          // footer 메뉴에 onclick을 할 경우 사용
-          // onClick={route.onClick}
-        />
-      ))}
+      {currentUser.role === "normal"
+        ? normalRoutes.map(item => (
+            <MobileItem
+              key={item.href}
+              href={item.href}
+              label={item.label}
+              icon={item.icon}
+              active={item.active}
+              // 클릭 이벤트
+              // onClick={item.onClick}
+            />
+          ))
+        : agentRoutes.map(item => (
+            <MobileItem
+              key={item.href}
+              href={item.href}
+              label={item.label}
+              icon={item.icon}
+              active={item.active}
+              // 클릭 이벤트
+              // onClick={item.onClick}
+            />
+          ))}
     </div>
   );
 };

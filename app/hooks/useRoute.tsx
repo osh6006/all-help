@@ -1,12 +1,11 @@
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 import { HiChat, HiUsers, HiHome, HiSearch } from "react-icons/hi";
-import useConversation from "./useConversation";
 
 const useRoute = () => {
   const pathname = usePathname()?.split("/")[1];
 
-  const routes = useMemo(
+  const normalRoutes = useMemo(
     () => [
       {
         label: "Home",
@@ -36,7 +35,24 @@ const useRoute = () => {
     [pathname]
   );
 
-  return routes;
+  const agentRoutes = useMemo(
+    () => [
+      {
+        label: "Home",
+        href: "/",
+        icon: HiHome,
+        active: pathname === "",
+      },
+      {
+        label: "Chat",
+        href: "/conversations",
+        icon: HiChat,
+        active: pathname === "conversations",
+      },
+    ],
+    [pathname]
+  );
+  return { normalRoutes, agentRoutes };
 };
 
 export default useRoute;

@@ -6,7 +6,6 @@ import { DesktopItem } from "./DesktopItem";
 import { User } from "@prisma/client";
 import Avatar from "../Avatar";
 import SettingsModal from "./SettingsModal";
-import Button from "../Button";
 import { useRouter } from "next/navigation";
 import { MdLogin } from "react-icons/md";
 import Link from "next/link";
@@ -16,9 +15,8 @@ interface DesktopSidebarProps {
 }
 
 const DesktopSidebar: React.FC<DesktopSidebarProps> = ({ currentUser }) => {
-  const routes = useRoute();
+  const { normalRoutes, agentRoutes } = useRoute();
   const [isOpen, setIsOpen] = useState(false);
-  const route = useRouter();
 
   return (
     <>
@@ -62,17 +60,29 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = ({ currentUser }) => {
             space-y-1
         "
           >
-            {routes.map(item => (
-              <DesktopItem
-                key={item.href}
-                href={item.href}
-                label={item.label}
-                icon={item.icon}
-                active={item.active}
-                // 클릭 이벤트
-                // onClick={item.onClick}
-              />
-            ))}
+            {currentUser.role === "normal"
+              ? normalRoutes.map(item => (
+                  <DesktopItem
+                    key={item.href}
+                    href={item.href}
+                    label={item.label}
+                    icon={item.icon}
+                    active={item.active}
+                    // 클릭 이벤트
+                    // onClick={item.onClick}
+                  />
+                ))
+              : agentRoutes.map(item => (
+                  <DesktopItem
+                    key={item.href}
+                    href={item.href}
+                    label={item.label}
+                    icon={item.icon}
+                    active={item.active}
+                    // 클릭 이벤트
+                    // onClick={item.onClick}
+                  />
+                ))}
           </ul>
         </nav>
 
