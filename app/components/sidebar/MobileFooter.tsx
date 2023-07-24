@@ -32,8 +32,8 @@ const MobileFooter: React.FC<MobileFooterProps> = ({ currentUser }) => {
         lg:hidden
     "
     >
-      {currentUser.role === "normal"
-        ? normalRoutes.map(item => (
+      {currentUser?.role === "normal"
+        ? normalRoutes.map((item) => (
             <MobileItem
               key={item.href}
               href={item.href}
@@ -44,7 +44,7 @@ const MobileFooter: React.FC<MobileFooterProps> = ({ currentUser }) => {
               // onClick={item.onClick}
             />
           ))
-        : agentRoutes.map(item => (
+        : agentRoutes?.map((item) => (
             <MobileItem
               key={item.href}
               href={item.href}

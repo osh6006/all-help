@@ -20,11 +20,7 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = ({ currentUser }) => {
 
   return (
     <>
-      <SettingsModal
-        currentUser={currentUser}
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-      />
+      <SettingsModal currentUser={currentUser} isOpen={isOpen} onClose={() => setIsOpen(false)} />
       <div
         className="
             hidden
@@ -60,8 +56,8 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = ({ currentUser }) => {
             space-y-1
         "
           >
-            {currentUser.role === "normal"
-              ? normalRoutes.map(item => (
+            {currentUser?.role === "normal"
+              ? normalRoutes.map((item) => (
                   <DesktopItem
                     key={item.href}
                     href={item.href}
@@ -72,7 +68,7 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = ({ currentUser }) => {
                     // onClick={item.onClick}
                   />
                 ))
-              : agentRoutes.map(item => (
+              : agentRoutes.map((item) => (
                   <DesktopItem
                     key={item.href}
                     href={item.href}
