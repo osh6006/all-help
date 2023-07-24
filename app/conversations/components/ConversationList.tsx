@@ -24,10 +24,7 @@ interface ConversationListProps {
   title?: string;
 }
 
-const ConversationList: React.FC<ConversationListProps> = ({
-  initialItems,
-  users,
-}) => {
+const ConversationList: React.FC<ConversationListProps> = ({ initialItems, users }) => {
   const [items, setItems] = useState(initialItems);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -48,8 +45,8 @@ const ConversationList: React.FC<ConversationListProps> = ({
     pusherClient.subscribe(pusherKey);
 
     const updateHandler = (conversation: FullConversationType) => {
-      setItems(current =>
-        current.map(currentConversation => {
+      setItems((current) =>
+        current.map((currentConversation) => {
           if (currentConversation.id === conversation.id) {
             return {
               ...currentConversation,
@@ -63,7 +60,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
     };
 
     const newHandler = (conversation: FullConversationType) => {
-      setItems(current => {
+      setItems((current) => {
         if (find(current, { id: conversation.id })) {
           return current;
         }
@@ -73,8 +70,8 @@ const ConversationList: React.FC<ConversationListProps> = ({
     };
 
     const removeHandler = (conversation: FullConversationType) => {
-      setItems(current => {
-        return [...current.filter(convo => convo.id !== conversation.id)];
+      setItems((current) => {
+        return [...current.filter((convo) => convo.id !== conversation.id)];
       });
     };
 
@@ -85,23 +82,20 @@ const ConversationList: React.FC<ConversationListProps> = ({
 
   return (
     <>
-      <GroupChatModal
-        users={users}
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
+      <GroupChatModal users={users} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       <aside
         className={clsx(
           `
-        fixed 
-        inset-y-0 
-        overflow-y-auto
-        border-r
+        border-b
         border-gray-200 
-        pb-20 
+        lg:fixed 
+        lg:inset-y-0 
         lg:left-20
         lg:block 
         lg:w-80 
+        lg:overflow-y-auto
+        lg:border-r 
+        lg:border-gray-200 
         lg:pb-0 
       `,
           isOpen ? "hidden" : "left-0 block w-full"
@@ -125,13 +119,27 @@ const ConversationList: React.FC<ConversationListProps> = ({
               <MdOutlineGroupAdd size={20} />
             </div> */}
           </div>
-          {items.map(item => (
-            <ConversationBox
-              key={item.id}
-              data={item}
-              selected={conversationId === item.id}
-            />
-          ))}
+          <h2 className="my-2 text-lg font-semibold">최근 대화 목록</h2>
+          <div className="space-y-2">
+            {items.map((item) => (
+              <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
+            ))}{" "}
+            {items.map((item) => (
+              <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
+            ))}{" "}
+            {items.map((item) => (
+              <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
+            ))}{" "}
+            {items.map((item) => (
+              <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
+            ))}{" "}
+            {items.map((item) => (
+              <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
+            ))}{" "}
+            {items.map((item) => (
+              <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
+            ))}
+          </div>
         </div>
       </aside>
     </>

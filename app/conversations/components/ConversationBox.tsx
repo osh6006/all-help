@@ -18,10 +18,7 @@ interface ConversationBoxProps {
   selected?: boolean;
 }
 
-const ConversationBox: React.FC<ConversationBoxProps> = ({
-  data,
-  selected,
-}) => {
+const ConversationBox: React.FC<ConversationBoxProps> = ({ data, selected }) => {
   const otherUser = useOtherUser(data);
   const session = useSession();
   const router = useRouter();
@@ -36,10 +33,7 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
     return messages[messages.length - 1];
   }, [data.messages]);
 
-  const userEmail = useMemo(
-    () => session.data?.user?.email,
-    [session.data?.user?.email]
-  );
+  const userEmail = useMemo(() => session.data?.user?.email, [session.data?.user?.email]);
 
   const hasSeen = useMemo(() => {
     if (!lastMessage) {
@@ -52,7 +46,7 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
       return false;
     }
 
-    return seenArray.filter(user => user.email === userEmail).length !== 0;
+    return seenArray.filter((user) => user.email === userEmail).length !== 0;
   }, [userEmail, lastMessage]);
 
   const lastMessageText = useMemo(() => {
@@ -80,26 +74,20 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
         space-x-3 
         rounded-lg
         p-3
+        shadow
         transition
         hover:bg-neutral-100
         `,
         selected ? "bg-neutral-100" : "bg-white"
       )}
     >
-      {data?.isGroup ? (
-        <AvatarGroup users={data.users} />
-      ) : (
-        <Avatar user={otherUser} />
-      )}
+      {data?.isGroup ? <AvatarGroup users={data.users} /> : <Avatar user={otherUser} />}
       <div className="min-w-0 flex-1">
         <div className="focus:outline-none">
           <span className="absolute inset-0" aria-hidden="true" />
           <div className="mb-1 flex items-center justify-between">
             <p className="text-md font-medium text-gray-900">
-              <strong className="">
-                {(data.users[0].role === "agent" && otherUser.company) ||
-                  otherUser.name}
-              </strong>
+              <strong className="">{(data.users[0].role === "agent" && otherUser.company) || otherUser.name}</strong>
               <span>님</span>
             </p>
             {lastMessage?.createdAt && (
