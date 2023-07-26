@@ -67,6 +67,7 @@ export const authOptions: AuthOptions = {
   callbacks: {
     signIn({ user, profile }) {
       console.log("sign in", user, profile);
+      if (!user.role) user.role = "normal";
       return true;
     },
     async jwt({ token, user }) {
@@ -75,7 +76,7 @@ export const authOptions: AuthOptions = {
       }
       return token;
     },
-    session({ session, token }) {
+    async session({ session, token }) {
       if (token && session.user) {
         session.user.role = token.role;
       }
