@@ -123,21 +123,6 @@ const ConversationList: React.FC<ConversationListProps> = ({ initialItems, users
           <div className="space-y-2">
             {items.map((item) => (
               <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
-            ))}{" "}
-            {items.map((item) => (
-              <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
-            ))}{" "}
-            {items.map((item) => (
-              <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
-            ))}{" "}
-            {items.map((item) => (
-              <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
-            ))}{" "}
-            {items.map((item) => (
-              <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
-            ))}{" "}
-            {items.map((item) => (
-              <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
             ))}
           </div>
         </div>

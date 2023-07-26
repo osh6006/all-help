@@ -76,11 +76,6 @@ const LiveUserList: React.FC<LiveUserListProps> = ({ initialItems, users, curren
 
   return (
     <>
-      {currentUser?.role === "normal" && (
-        <div className={clsx("h-full lg:block lg:pl-80", isOpen ? "hidden" : "block")}>
-          <EmptyState />
-        </div>
-      )}
       {currentUser?.role === "agent" && (
         <div className={clsx("lg:mt-0 lg:h-full lg:pl-80", isOpen ? "hidden" : "block")}>
           <div className="p-5">
@@ -97,84 +92,6 @@ const LiveUserList: React.FC<LiveUserListProps> = ({ initialItems, users, curren
                 xl:grid-cols-4
             "
             >
-              {items.map((item) => (
-                <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
-              ))}
-              {items.map((item) => (
-                <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
-              ))}
-              {items.map((item) => (
-                <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
-              ))}
-              {items.map((item) => (
-                <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
-              ))}
-              {items.map((item) => (
-                <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
-              ))}
-              {items.map((item) => (
-                <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
-              ))}
-              {items.map((item) => (
-                <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
-              ))}
-              {items.map((item) => (
-                <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
-              ))}
-              {items.map((item) => (
-                <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
-              ))}
-              {items.map((item) => (
-                <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
-              ))}{" "}
-              {items.map((item) => (
-                <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
-              ))}{" "}
-              {items.map((item) => (
-                <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
-              ))}{" "}
-              {items.map((item) => (
-                <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
-              ))}{" "}
-              {items.map((item) => (
-                <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
-              ))}{" "}
-              {items.map((item) => (
-                <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
-              ))}{" "}
-              {items.map((item) => (
-                <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
-              ))}{" "}
-              {items.map((item) => (
-                <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
-              ))}{" "}
-              {items.map((item) => (
-                <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
-              ))}{" "}
-              {items.map((item) => (
-                <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
-              ))}{" "}
-              {items.map((item) => (
-                <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
-              ))}{" "}
-              {items.map((item) => (
-                <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
-              ))}{" "}
-              {items.map((item) => (
-                <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
-              ))}{" "}
-              {items.map((item) => (
-                <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
-              ))}{" "}
-              {items.map((item) => (
-                <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
-              ))}{" "}
-              {items.map((item) => (
-                <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
-              ))}{" "}
-              {items.map((item) => (
-                <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
-              ))}{" "}
               {items.map((item) => (
                 <ConversationBox key={item.id} data={item} selected={conversationId === item.id} />
               ))}

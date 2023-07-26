@@ -16,7 +16,10 @@ export default async function ConversationsLayout({ children }: { children: Reac
     <SideBar>
       <div className="h-full">
         <ConversationList users={users} initialItems={conversationsTen} />
-        <LiveUserList currentUser={currentUser!} users={users} initialItems={conversations} />
+
+        {currentUser?.role === "agent" && (
+          <LiveUserList currentUser={currentUser!} users={users} initialItems={conversations} />
+        )}
         {children}
       </div>
     </SideBar>

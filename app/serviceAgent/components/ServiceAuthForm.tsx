@@ -22,14 +22,7 @@ const ServiceAuthForm = () => {
   const isUser = useIsUser();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const {
-    firstTime,
-    secondTime,
-    setFirstTime,
-    setSecondTime,
-    setTimeError,
-    timeError,
-  } = useTimePicker();
+  const { firstTime, secondTime, setFirstTime, setSecondTime, setTimeError, timeError } = useTimePicker();
 
   const {
     register,
@@ -56,7 +49,9 @@ const ServiceAuthForm = () => {
     });
   };
 
-  const onSubmit: SubmitHandler<FieldValues> = data => {
+  console.log(image);
+
+  const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
     // 서버에 가입 요청
 
@@ -163,10 +158,8 @@ const ServiceAuthForm = () => {
                 message: "비밀번호는 최소 8자 이상이어야 합니다.",
               },
               pattern: {
-                value:
-                  /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).*$/,
-                message:
-                  "비밀번호는 숫자, 특수 문자를 포함한 영문 조합이어야 합니다.",
+                value: /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).*$/,
+                message: "비밀번호는 숫자, 특수 문자를 포함한 영문 조합이어야 합니다.",
               },
             }}
           />
@@ -193,8 +186,7 @@ const ServiceAuthForm = () => {
               validation={{
                 required: "회사 번호를 입력해주세요.",
                 pattern: {
-                  value:
-                    /^0(1[0]|2|3[1-3]|4[1-4]|5[1-5]|6[1-4])-?([0-9]{3,4})-?([0-9]{4})$/,
+                  value: /^0(1[0]|2|3[1-3]|4[1-4]|5[1-5]|6[1-4])-?([0-9]{3,4})-?([0-9]{4})$/,
                   message: "유효한 전화번호를 입력해주세요.",
                 },
               }}
@@ -258,11 +250,7 @@ const ServiceAuthForm = () => {
                   hover:text-white
                 "
               >
-                <CldUploadButton
-                  options={{ maxFiles: 1 }}
-                  onUpload={handleUpload}
-                  uploadPreset="m5qf4qmx"
-                >
+                <CldUploadButton options={{ maxFiles: 1 }} onUpload={handleUpload} uploadPreset="m5qf4qmx">
                   업로드
                 </CldUploadButton>
               </div>
@@ -288,10 +276,7 @@ const ServiceAuthForm = () => {
         "
         >
           <div>이미 계정이 있으신가요?</div>
-          <div
-            onClick={() => router.push("/signIn")}
-            className="cursor-pointer underline"
-          >
+          <div onClick={() => router.push("/signIn")} className="cursor-pointer underline">
             로그인 하기
           </div>
         </div>

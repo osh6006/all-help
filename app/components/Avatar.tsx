@@ -29,7 +29,11 @@ const Avatar: React.FC<AvatarProps> = ({ user }) => {
         <Image
           sizes="(max-width: 768px) 100%, (max-width: 1200px) 100%, 100%"
           alt="Avatar"
-          src={user?.image || "/images/placeholder.jpg"}
+          src={
+            user?.role === "normal"
+              ? user?.image || "/images/placeholder.jpg"
+              : user?.companyImage || "/images/placeholder.jpg"
+          }
           fill
         />
       </div>
