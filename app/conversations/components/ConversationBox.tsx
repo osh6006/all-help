@@ -85,22 +85,11 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({ data, selected }) => 
       <div className="min-w-0 flex-1">
         <div className="focus:outline-none">
           <span className="absolute inset-0" aria-hidden="true" />
-          <div className="mb-1 flex items-center justify-between">
+          <div className="mb-1">
             <p className="text-md font-medium text-gray-900">
               <strong className="">{(data.users[0].role === "agent" && otherUser.company) || otherUser.name}</strong>
               <span>님</span>
             </p>
-            {lastMessage?.createdAt && (
-              <p
-                className="
-                  text-xs 
-                  font-light 
-                  text-gray-400
-                "
-              >
-                {format(new Date(lastMessage.createdAt), "p")}
-              </p>
-            )}
           </div>
           <p
             className={clsx(
@@ -113,6 +102,20 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({ data, selected }) => 
           >
             {lastMessageText}
           </p>
+          <div>
+            {lastMessage?.createdAt && (
+              <p
+                className="
+                  text-right 
+                  text-xs 
+                  font-light
+                  text-gray-400
+                "
+              >
+                {format(new Date(lastMessage.createdAt), "p")}
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </div>
